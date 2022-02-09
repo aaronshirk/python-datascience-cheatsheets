@@ -67,3 +67,36 @@ _indexes from the tables are preserved_
 - _will only include column names common to both tables_
 - _default value of 'join' is 'outer'_
 - _sort argument has no affect with join='inner'_
+
+#### Using append method
+
+- `append()` is a simplified version of `concat()`
+- supports: `ignore_index` and `sort`
+- does not support: `keys` and `join`
+
+  - Always `join = outer`
+
+    table1.append([table2, table3], ignore_index=True, sort=True)
+
+## Verifying data integrity on merge and concatenate
+
+- Possible merge issues
+  - Unintentional one-to-many, many-to-many, etc
+- Possible concatenating issues
+  - Duplicate records possibly introduced
+
+### Validating Merges
+
+`.merge(validate=None)`
+
+- Checks if merge is of a specified type
+
+  - 'one-to-one'
+  - 'one-to-many'
+  - 'many-to-one'
+  - 'many-to-many'
+
+`table1.merge(table2, on='column', validate='one-to-one')`
+
+- If data is valid, then no issues
+- If it detects invalid merge type, it raises MergeError
