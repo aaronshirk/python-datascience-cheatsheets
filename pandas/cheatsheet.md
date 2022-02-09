@@ -100,3 +100,12 @@ _indexes from the tables are preserved_
 
 - If data is valid, then no issues
 - If it detects invalid merge type, it raises MergeError
+
+### Verifying concatenations
+
+`.concat(verify_integrity=False)`
+
+- Checks whether the new concatenated index contains duplicate records
+- default value is False
+
+`pd.concat([table1, table2], verify_integrity=True)`
