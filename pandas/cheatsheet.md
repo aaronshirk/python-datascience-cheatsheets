@@ -128,7 +128,32 @@ _indexes from the tables are preserved_
 | Overlapping column names<br> - suffixes                                  | Overlapping column names<br> - suffixes                                  |
 | Calling the method<br> - table1.merge(table2)                            | Calling the method<br> - pd.merge_ordered(table1, table2)                |
 
+### Normal Example
+
+```
+import pandas as pd
+pd.merge_ordered(table, table2, on='column', suffices=('_sux2', '_suf2'))
+```
+
+### Forward Fill
+
+- Useful for handling missing data or values
+
+```
+pd.merge_ordered(table, table2, on='column',
+              suffixes=('_sux2', '_suf2'),
+              fill_method='ffill')
+```
+
 ## Using merge_asof()
+
+- Provides a fuzzy search
+- Similar to merge_ordered left join
+  - similar features as merge_ordered
+- Matches on the nearest key column and not exact matches
+- Default match is "backwards" - closest value in right table that is <= the value in left table
+
+### Normal Example
 
 ## Selecting data with query()
 
