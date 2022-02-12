@@ -153,7 +153,26 @@ pd.merge_ordered(table, table2, on='column',
 - Matches on the nearest key column and not exact matches
 - Default match is "backwards" - closest value in right table that is <= the value in left table
 
-### Normal Example
+### Normal example
+
+```
+pd.merge_asof(table1, table2, on='date_time', suffixes=('_suf1', '_suf2'))
+```
+
+### merge_asof() example with direction
+
+- closest value in the right table that is >= the value in the left table
+
+```
+pd.merge_asof(table1, table2, on='date_time',
+                suffixes=('_suf1', '_suf2',
+                direction='forward'))
+```
+
+### When to use
+
+- Data sample from a process and values don't line up exactly
+- Developing a training set
 
 ## Selecting data with query()
 
