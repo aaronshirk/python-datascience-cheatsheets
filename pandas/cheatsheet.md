@@ -1,3 +1,5 @@
+# Advanced Merging and Concatenating
+
 ## Filtering Joins
 
 Filter observations from a table based on whether or not they match an observation in another table
@@ -109,3 +111,25 @@ _indexes from the tables are preserved_
 - default value is False
 
 `pd.concat([table1, table2], verify_integrity=True)`
+
+# Merging Ordered and Time-Series Data
+
+## Using merge_ordered()
+
+- Useful for ordered or time-series data
+- Like a regular merge, but with an outer join by default, and it's ordered
+
+### Comparing methods
+
+| _merge()_ method                                                         | _merge_ordered()_ method                                                 |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Columns to join on<br> - on, left_on, right_on                           | Columns to join on<br> - on, left_on, right_on                           |
+| Type of join<br> - how (left, right, inner, outer)<br> - _default_ inner | Type of join<br> - how (left, right, inner, outer)<br> - _default_ outer |
+| Overlapping column names<br> - suffixes                                  | Overlapping column names<br> - suffixes                                  |
+| Calling the method<br> - table1.merge(table2)                            | Calling the method<br> - pd.merge_ordered(table1, table2)                |
+
+## Using merge_asof()
+
+## Selecting data with query()
+
+## Reshaping data with melt()
