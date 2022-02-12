@@ -176,4 +176,24 @@ pd.merge_asof(table1, table2, on='date_time',
 
 ## Selecting data with query()
 
+- Accepts an input string
+  - Input string used to determine what rows are returned
+  - Input string is similar the SQL statement after a _WHERE_ clause
+
+### Querying on a single condition
+
+`df1.query('nike >= 90')`
+
+### Querying on multiple conditions - "and", "or"
+
+`df1.query('nike > 90 and disney < 140)`
+
+`df1.query('nike > 44 or disney < 64)`
+
+### Using .query() to select text
+
+`df1.query('column1=="disney" or (column1=="nike" and column2 < 90)')`
+
+- Here the query itself is inclosed in (') quotes, and the string to compare is in (") quotes
+
 ## Reshaping data with melt()
