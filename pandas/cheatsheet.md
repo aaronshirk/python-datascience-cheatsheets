@@ -2,7 +2,61 @@
 
 ## Inner Join
 
+### Inner Join
+
+`df3 = df1.merge(df2, on='column1')`
+
+- Merges df1 and df2 together, performing an inner join on _column1_
+- _column1_ must be common between the two tables
+- Only returns rows that have matching values in both tables
+
+### Example merge on multiple columns
+
+- It's possible to merge on multiple columns
+
+`df3 = df1.merge(df2, on=['column1', 'column2'])`
+
+### Suffixes
+
+- Columns with the same name in both tables will automatically be given a suffix to distinguish them
+- Can also use the _suffixes_ argument to control the names
+
+```
+df3 = df1.merge(df2, on='column1', suffixes=('_col1', '_col2'))
+```
+
+## One to many relationships
+
+- One-To-Many = Every row in left table is related to one or more rows in the right table
+
+### One-to-many example
+
+```
+df3 = df1.merge(df2, on='column1', suffixes=('_col1', '_col2'))
+```
+
+- Syntax is the same as one-to-one, pandas handles this automatically
+
+## Merging multiple DataFrames
+
+### Merging multiple tables
+
+```
+df4 = df1.merge(df2, on=['column1', 'column2']) \
+                    .merge(df3, on='column3', suffixes=['_df2', '_df3'])
+```
+
+- This pattern can be continued with more tables
+
 # Merging Tables with Different Join Types
+
+## Left join
+
+## Other joins
+
+## Self join
+
+## Merging on indexes
 
 # Advanced Merging and Concatenating
 
@@ -137,8 +191,10 @@ _indexes from the tables are preserved_
 ### Normal Example
 
 ```
+
 import pandas as pd
-pd.merge_ordered(table, table2, on='column', suffices=('_sux2', '_suf2'))
+pd.merge_ordered(table, table2, on='column', suffices=('\_sux2', '\_suf2'))
+
 ```
 
 ### Forward Fill
@@ -146,9 +202,11 @@ pd.merge_ordered(table, table2, on='column', suffices=('_sux2', '_suf2'))
 - Useful for handling missing data or values
 
 ```
+
 pd.merge_ordered(table, table2, on='column',
-              suffixes=('_sux2', '_suf2'),
-              fill_method='ffill')
+suffixes=('\_sux2', '\_suf2'),
+fill_method='ffill')
+
 ```
 
 ## Using merge_asof()
@@ -162,7 +220,9 @@ pd.merge_ordered(table, table2, on='column',
 ### Normal example
 
 ```
-pd.merge_asof(table1, table2, on='date_time', suffixes=('_suf1', '_suf2'))
+
+pd.merge_asof(table1, table2, on='date_time', suffixes=('\_suf1', '\_suf2'))
+
 ```
 
 ### merge_asof() example with direction
@@ -170,9 +230,11 @@ pd.merge_asof(table1, table2, on='date_time', suffixes=('_suf1', '_suf2'))
 - closest value in the right table that is >= the value in the left table
 
 ```
+
 pd.merge_asof(table1, table2, on='date_time',
-                suffixes=('_suf1', '_suf2',
-                direction='forward'))
+suffixes=('\_suf1', '\_suf2',
+direction='forward'))
+
 ```
 
 ### When to use
@@ -225,7 +287,13 @@ pd.merge_asof(table1, table2, on='date_time',
 ### Melting with column names
 
 ```
+
 df2 = df1.melt(id_vars=['column1', 'column2'],
-            value_vars=['column3', 'column4'],
-            var_name=['name1'], value_name='name2')
+value_vars=['column3', 'column4'],
+var_name=['name1'], value_name='name2')
+
+```
+
+```
+
 ```
