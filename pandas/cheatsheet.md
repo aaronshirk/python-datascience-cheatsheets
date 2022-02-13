@@ -1,3 +1,9 @@
+# Data Merging Basics
+
+## Inner Join
+
+# Merging Tables with Different Join Types
+
 # Advanced Merging and Concatenating
 
 ## Filtering Joins
@@ -197,3 +203,29 @@ pd.merge_asof(table1, table2, on='date_time',
 - Here the query itself is inclosed in (') quotes, and the string to compare is in (") quotes
 
 ## Reshaping data with melt()
+
+- Wide vs long format data
+  - wide tends to be easier for humans to read
+  - long format tends to be better for computers
+  - The melt() method allows us to unpivot a table from wide to long format
+
+### Example of .melt()
+
+`df2 = df1.melt(id_vars=['column1', 'column2'])`
+
+- _id_vars_ are the columns in the original data set that we don't want to change
+
+### Melting with value_vars
+
+`df2 = df1.melt(id_vars=['column1', 'column2'], value_vars=['column3', 'column4'])`
+
+- _value_vars_ are the columns we want to unpivot
+- order of _value_vars_ is reflected in the output
+
+### Melting with column names
+
+```
+df2 = df1.melt(id_vars=['column1', 'column2'],
+            value_vars=['column3', 'column4'],
+            var_name=['name1'], value_name='name2')
+```
