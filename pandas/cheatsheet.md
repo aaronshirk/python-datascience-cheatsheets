@@ -52,7 +52,37 @@ df4 = df1.merge(df2, on=['column1', 'column2']) \
 
 ## Left join
 
+- Returns all rows in the left table, and only those rows in the right table that match
+
+### Merge with left join
+
+`df3 = df1.merge(df2, on='column1', how='left')`
+
+- Note: the number or rows returned in a left join, one-to-one is always the same number of rows in the left table
+
 ## Other joins
+
+### Right Join
+
+- Returns all rows in the right table, and only those rows in the left table that match
+
+### Merge with right join
+
+```
+df3 = df1.merge(df2, how='right',
+                left_on='column1', right_on='column2')
+```
+
+### Outer join
+
+- Retuns all the rows in both tables, regardless of whether there is a match
+
+### Merge with outer join
+
+```
+df3 = df1.merge(df2, on='column1', how='outer',
+                suffixes=('_df1', '_df2'))
+```
 
 ## Self join
 
