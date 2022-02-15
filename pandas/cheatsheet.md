@@ -58,7 +58,7 @@ df4 = df1.merge(df2, on=['column1', 'column2']) \
 
 `df3 = df1.merge(df2, on='column1', how='left')`
 
-- Note: the number or rows returned in a left join, one-to-one is always the same number of rows in the left table
+- Note: the number of rows returned in a left join, one-to-one is always the same number of rows in the left table
 
 ## Other joins
 
@@ -84,7 +84,29 @@ df3 = df1.merge(df2, on='column1', how='outer',
                 suffixes=('_df1', '_df2'))
 ```
 
-## Self join
+## Merging a table to itself
+
+### Example self-join
+
+```
+df2 = df1.merge(df1, left_on='column2', right_on='id',
+                suffixes=('_org', '_seq'))
+```
+
+### Self-join with left join type
+
+```
+df2 = df1.merge(df1, left_on='column2', right_on='id',
+                how='left' suffixes=('_org', '_seq'))
+```
+
+### When to use self-join
+
+- Hierarchical relationships
+- Sequential relationships
+- Graph data
+
+- Note: self-joins can use the different merge types already discussed (i.e. inner, left, right, outer)
 
 ## Merging on indexes
 
