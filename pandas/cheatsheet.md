@@ -110,6 +110,30 @@ df2 = df1.merge(df1, left_on='column2', right_on='id',
 
 ## Merging on indexes
 
+- The _on_ argument of the merge() method will use an index column
+- The merge() method automatically adjusts to using the index, otherwise it's much the same as non-index merges
+
+### Example merge on index
+
+```
+df3 = df1.merge(df2, on='id', how='left')
+```
+
+- Here the _on_ argument = 'id', where 'id' is an index column called 'id'
+
+### Multi-index merge
+
+```
+df3 = df1.merge(df2, on=['column1', 'column2'])
+```
+
+### Index merge with left_on and right_on
+
+```
+df3 = df1.merge(df2, left_on='column1', left_index=True,
+                    right_on='column2', right_index=True)
+```
+
 # Advanced Merging and Concatenating
 
 ## Filtering Joins
