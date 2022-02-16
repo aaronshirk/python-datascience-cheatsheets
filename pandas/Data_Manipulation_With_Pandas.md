@@ -121,6 +121,82 @@ bmi_lt_100_height[['name', 'height_cm', 'bmi']]
 
 # Aggregating DataFrames
 
+## Summary statistics
+
+### Summarizing numerical data
+
+`dogs['height_cm].mean()`
+
+- .median()
+- .mode()
+- .min()
+- .max()
+
+### Summarizing dates
+
+- Oldest
+
+`dogs['date_of_birth'].min()`
+
+- Youngest
+
+`dogs['date_of_birth'].max()`
+
+### The .agg() method
+
+```
+def pct30(column):
+    return column.quantile(0.3)
+
+dogs['weight_kg'].agg(pct30)
+```
+
+### Summaries on multiple columns
+
+```
+dogs[['weight_kg', 'height_cm']].agg(pct30)
+```
+
+### Multiple summaries
+
+```
+dogs[['weight_kg', 'height_cm']].agg(pct30, pct40)
+```
+
+### Cumulative sum
+
+`dogs['weight_kg'].cumsum()`
+
+- .cummax()
+- .cummin()
+- .cumprod()
+
+## Counting
+
+### Dropping duplicate names
+
+`df.drop_duplicates(subset='column1')`
+
+### Dropping duplicate pairs
+
+`df.drop_duplicates(subset=['column1', 'column2'])`
+
+### Counting number of a column
+
+`df['column1'].value_counts()`
+
+`df['column1'].value_counts(sort=True)`
+
+- Sort puts the larger count values towards the top of the results
+
+`df['column1'].value_counts(normalize=True)`
+
+- _normalize_ turns counts into proportions of the total
+
+## Grouped summary statistics
+
+## Pivot tables
+
 # Slicing and Indexing DataFrames
 
 # Creating and Visualizing DataFrames
