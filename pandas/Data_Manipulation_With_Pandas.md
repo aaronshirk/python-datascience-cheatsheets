@@ -213,6 +213,119 @@ dogs[['weight_kg', 'height_cm']].agg(pct30, pct40)
 
 ## Pivot tables
 
+### Groupby compared to pivot table
+
+#### Groupby
+
+`dogs.groupby('color')['weight_kg'].mean()`
+
+#### pivot_table
+
+`dogs.pivot_table(values='weight_kg', index='color')`
+
+- _values_ is the column that you want to calculate summary statistics
+- _index_ is the column that you want to group by
+- by default .pivot_table() takes the mean of each group
+
+### Different statistics
+
+```
+import numpy as np
+dogs.pivot_table(values='weight_kg', index='color', aggfunc=np.median)
+```
+
+### Multiple statistics
+
+```
+import numpy as np
+dogs.pivot_table(values='weight_kg', index='color', aggfunc=[np.median, np.mean])
+```
+
+### Pivot on two variables
+
+#### Groupby
+
+`dogs.groupby(['color', 'breed'])['weight_kg'].mean()`
+
+#### pivot_table
+
+`dogs.pivot_table(values='weight_kg', index='color', columns='breed')`
+
+### Fill missing values in pivot tables
+
+`dogs.pivot_table(values='weight_kg', index='color', columns='breed', fill_value=0)`
+
+### Summing with pivot tables
+
+`dogs.pivot_table(values='weight_kg', index='color', columns='breed', fill_value=0, margins=True)`
+
+- Last row and column of the pivot table contain the mean of each column or row, not including missing values
+
 # Slicing and Indexing DataFrames
+
+## Explicit Indexes
+
+### Setting a column as an index
+
+`dog_ind = dogs.set_index('name')`
+
+- Moves a column from the body to the index
+
+### Removing an index
+
+`dog_ind.reset_index()`
+
+### Dropping an index
+
+`dog_ind.reset_index(drop=True)`
+
+- This removes the index column
+
+### Indexes make subsetting simpler
+
+#### Non-index subset example
+
+`dogs[dogs['name'].isin(['Bella', 'Stella'])]`
+
+#### Index subset using loc
+
+`dogs_ind.loc[['Bella', 'Stella']]`
+
+### Index values don't need to be unique
+
+```
+dogs_ind2 = dogs.set_index('breed')
+dogs_ind2.loc['Labrador']
+```
+
+- If breed column has multiple Labradors, then all rows will be returned
+
+### Multi-level indexes a.k.a. hierarchical indexes
+
+`dogs_ind2 = dogs.set_index(['breed', 'color'])`
+
+#### Subset the outer level of the index with a list
+
+`dogs_ind3.loc[['Labrador', 'Chihuahua']]`
+
+#### Subset the inner level with a list of tuples
+
+`dogs_ind3.loc[[('Labrador', 'Brown'), ('Chihuahua', 'Tan')]]`
+
+### Sorting by index values
+
+`dogs_ind3.sort_index()`
+
+- By default it sorts from outer index to inner, in ascending order
+
+### Controlling sort_index
+
+`dogs_ind3.sort_index(level=['color', 'breed'], ascending=[True, False])`
+
+### Index have some downsides
+
+- Index values are just data, and here we're storing data in multiple forms
+- Indexes violate "tidy data" principles
+- You need to learn two syntaxes, one for columns, and another for indexes
 
 # Creating and Visualizing DataFrames
