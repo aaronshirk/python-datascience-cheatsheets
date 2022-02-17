@@ -125,7 +125,7 @@ bmi_lt_100_height[['name', 'height_cm', 'bmi']]
 
 ### Summarizing numerical data
 
-`dogs['height_cm].mean()`
+`dogs['height_cm'].mean()`
 
 - .median()
 - .mode()
@@ -194,6 +194,22 @@ dogs[['weight_kg', 'height_cm']].agg(pct30, pct40)
 - _normalize_ turns counts into proportions of the total
 
 ## Grouped summary statistics
+
+### Grouped summaries
+
+`dogs.groupby('color')['weight_kg'].mean()`
+
+### Multiple Grouped summaries
+
+`dogs.groupby('color')['weight_kg'].agg([min, max, sum])`
+
+### Grouping by multiple variables
+
+`dogs.groupby(['color', 'breed'])['weight_kg'].mean()`
+
+### Many groups, many summaries
+
+`dogs.groupby(['color', 'breed'])[['weight_kg', 'height_cm']].mean()`
 
 ## Pivot tables
 
