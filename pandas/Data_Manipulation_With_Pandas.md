@@ -437,3 +437,45 @@ plt.legend(['F', 'M'])
 
 plt.show()
 ```
+
+## Missing values
+
+### Detecting missing values
+
+`dogs.isna()`
+
+- Get a boolean value for each value in the DataFrame indicating whether values is missing or not
+- This isn't very useful for a lot of data
+
+### Detecting any missing values
+
+`dogs.isna().any()`
+
+- Returns a boolean for each column, indicating if there are any missing values in the column
+
+### Counting missing values
+
+`dogs.isna().sum()`
+
+- Taking the sum of booleans is the same as counting the number of True(s)
+
+### Plot missing values
+
+```
+import matplotlib.pyplot as plt
+
+dogs.isna().sum().plot(kind='bar')
+
+plt.show()
+```
+
+### Removing missing values
+
+`dogs.dropna()`
+
+- Removes rows with missing data
+- Can lose a lot of data by doing this though
+
+`dogs.fillna(0)`
+
+- Fills any NaN(s) with 0
