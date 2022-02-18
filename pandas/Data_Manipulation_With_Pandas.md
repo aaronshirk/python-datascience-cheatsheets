@@ -329,3 +329,111 @@ dogs_ind2.loc['Labrador']
 - You need to learn two syntaxes, one for columns, and another for indexes
 
 # Creating and Visualizing DataFrames
+
+## Visualizing your data
+
+### Histograms
+
+- Show the distribution of a variable
+
+```
+import matplotlib.pyplot as plt
+
+dog_pack['height_cm'].hist()
+
+plt.show()
+```
+
+### Change number of bars or 'bins'
+
+```
+import matplotlib.pyplot as plt
+
+dog_pack['height_cm'].hist(bins=20)
+
+plt.show()
+```
+
+### Bar plots
+
+- Show the relationship between a categorical and numeric variable (i.e. breed and weight)\
+
+```
+avg_weight_by_breed = dog_pack.groupby('breed')['weight_kg].mean()
+
+avg_weight_by_breed.plot(kind='bar')
+
+plt.show()
+```
+
+### Bar plot with title
+
+```
+avg_weight_by_breed = dog_pack.groupby('breed')['weight_kg].mean()
+
+avg_weight_by_breed.plot(kind='bar', title='Mean Weight by Dog Breed')
+
+plt.show()
+```
+
+### Line plots
+
+- Great for showing changes in numeric variables over time
+
+```
+sully.plot(x = 'date', y = 'weight_kg', kind='line')
+
+plt.show()
+```
+
+### Line plots - rotate axis labels
+
+```
+sully.plot(x = 'date', y = 'weight_kg', kind='line', rot=45)
+
+plt.show()
+```
+
+### Scatter plots
+
+- Great for showing the relationship between two numeric variables
+
+```
+dog_pack.plot(x = 'height_cm', y='weight_kg', kind='scatter')
+
+plt.show()
+```
+
+### Layering plots
+
+```
+dog_pack[dog_pack['sex'] == 'F']['height_cm].hist()
+
+dog_pack[dog_pack['sex'] == 'M']['height_cm].hist()
+
+plt.show()
+```
+
+### Adding a legend
+
+```
+dog_pack[dog_pack['sex'] == 'F']['height_cm].hist()
+
+dog_pack[dog_pack['sex'] == 'M']['height_cm].hist()
+
+plt.legend(['F', 'M'])
+
+plt.show()
+```
+
+### Transparency
+
+```
+dog_pack[dog_pack['sex'] == 'F']['height_cm].hist(alpha=0.7)
+
+dog_pack[dog_pack['sex'] == 'M']['height_cm].hist(alpha=0.7)
+
+plt.legend(['F', 'M'])
+
+plt.show()
+```
