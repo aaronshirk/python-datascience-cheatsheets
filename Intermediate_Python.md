@@ -134,6 +134,44 @@ plt.show()
 
 # Dictionaries and Pandas
 
+## Dictionaries, Part 1
+
+- Object of key values pairs
+
+```
+world = {"afghanistan": 30.55, "albania": 2.77, "algeria": 39.21}
+
+world["albania"]
+```
+
+- Easy to index into the dictionary using the key value
+
+## Dictionaries, Part 2
+
+### Recap
+
+- Dictionary keys have to be immutable values
+- For example, a "string" is immutable, but a list is not, so a list cannot be a key
+
+### More dictionary examples
+
+`world['sealand'] = 0.00607`
+
+- Set the value of a key; this is an update
+- Keys are unique in a dictionary
+
+`'sealand' in world`
+
+- This is a way to check if the key 'sealand' exists in the world dictionary
+
+`del(world['sealand'])`
+
+- _del()_ function will remove a key/value entry from a dictionary
+
+## Pandas, Part 1
+
+## Pandas, Part 2
+
 # Logic, Control Flow and Filtering
 
 # Loops
