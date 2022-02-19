@@ -479,3 +479,68 @@ plt.show()
 `dogs.fillna(0)`
 
 - Fills any NaN(s) with 0
+
+## Creating DataFrames
+
+- There are two ways to build DataFrames from dictionaries
+
+- From a list of dictionaries
+
+  - Constructed row by row
+
+- From a dictionary of lists
+  - Constructed column by column
+
+### List of dictionaries - by row
+
+- Each dictionary in the list is a row or observation
+
+```
+list-of-dicts = [
+    { "name": "Ginger", "breed": "Dachshund", "height_cm": 22,
+        "weight_kg": 10, "date_of_birth": "2019-03-14"},
+    { "name": "Scout", "breed": "Dalmatian", "height_cm": 59,
+        "weight_kg": 25, "date_of_birth": "2019-05-09"}
+]
+
+new_dogs = pd.DataFrame(list_of_dicts)
+```
+
+### Dictionary of lists - by column
+
+- Each key = column name
+- Value = list of column values
+
+```
+dict_of_lists = {
+    "name": ["Ginger", "Scout"],
+    "breed": ["Dachshund", "Dalmatian"],
+    "height_cm": [22, 59],
+    "weight_kg": [10, 25],
+    "date_of_birth": ["2019-03-14", "2019-05-09"]
+}
+
+new_dogs = pd.DataFrame(dict_of_lists)
+```
+
+## Reading and writing CSVs
+
+### What's a CSV file
+
+- CSV = comma-separated values
+- Designed for DataFrame-like data
+- Most databases and spreadsheet programs can use them or create them
+
+### CSV to DataFrame
+
+```
+import pandas as pd
+
+new_dogs = pd.read_csv("new_dogs.csv")
+```
+
+### DataFrame to CSV
+
+```
+new_dogs.to_csv("new_dogs_with_bmi.csv")
+```
