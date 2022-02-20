@@ -170,7 +170,107 @@ world["albania"]
 
 ## Pandas, Part 1
 
+### DataFrame from Dictionary
+
+```
+dict = {
+    "country": ['country1', 'country2', 'country3', 'country4'],
+    "capital": ['capital1', 'capital2', 'capital3', 'capital4'],
+    "area": [8.514, 17.183, 9.576, 1.221],
+    "population": [200.4, 143.5, 1357, 52.98]
+}
+```
+
+- keys (column labels)
+- values (data, column by column)
+
+```
+import pandas as pd
+brics = pd.DataFrame(dict)
+```
+
+### DataFrame from dictionary(2)
+
+- The index valuees in the DataFrame above will be numeric, starting at 0, by default
+- You can add index labels as follows:
+
+`brics.index = ['C1', 'C2', 'C3', 'C4']`
+
+### DataFrame from CSV file
+
+`brics = pd.read_csv('path/to/brics.csv')`
+
+- Specify the index column explicitly as follows:
+
+`brics = pd.read_csv('path/to/brics.csv', index_col = 0)`
+
 ## Pandas, Part 2
+
+### Index and select data
+
+- Square brackets
+- Advanced methods
+  - loc
+  - iloc
+
+### Column access []
+
+series_var = brics['country']
+
+- Single square brackets returns a pandas Series object
+- Series is like a 1D labeled array
+
+### Column access [[]]
+
+dataframe_var = brics[['country']]
+
+- Double square brackets returns a DataFrame object
+
+### Row access []
+
+- Use slice syntax
+
+rows = brics[1:4]
+
+- 1 is inclusive, 4 is exclusive
+
+### Row access loc
+
+`brics.loc['RU']`
+
+- Row as a pandas Series
+
+`brics.loc[['RU', 'IN', 'CH']]`
+
+### Row and Column loc
+
+`brics.loc[['RU', 'IN', 'CH'], ['country', 'capital']]`
+
+- Returns selected rows and columns
+
+`brics.loc[:, ['country', 'capital']`
+
+- Returns all rows and selected columns
+
+### Recap
+
+- Square brackets
+  - Column access: `brics[['country', 'capital']]`
+  - Row access: only through slicing
+- loc (label-based)
+  - Row access: `brics.loc[['RU', 'IN', 'CH']]`
+  - Column access: `brics.loc[:, ['country', 'capital']]`
+  - Row and column access: `brics.loc[['RU', 'IN', 'CH'], ['country', 'capital']]`
+
+### Row access iloc
+
+`brics.iloc[[1,2,3]]`
+
+### Row and column access iloc
+
+`brics.iloc[[1,2,3], [0, 1]]`
+
+`brics.iloc[:, [0, 1]]`
 
 # Logic, Control Flow and Filtering
 
