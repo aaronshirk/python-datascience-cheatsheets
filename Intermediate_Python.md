@@ -274,4 +274,87 @@ rows = brics[1:4]
 
 # Logic, Control Flow and Filtering
 
+## Comparison Operators
+
+### Numeric Comparisons
+
+`2 < 3`
+
+`2 == 3`
+
+`2 <= 3`
+
+### Other Comparisons
+
+`'carl' < 'chris'`
+
+`3 < 'chris'`
+
+- This one returns a TypeError
+
+`3 < 4.1`
+
+### Comparators
+
+| Comparator | Meaning                  |
+| ---------- | ------------------------ |
+| <          | less than                |
+| <=         | less than or equal to    |
+| >          | greater than             |
+| >=         | greater than or equal to |
+| ==         | equal                    |
+| !=         | not equal                |
+
+## Boolean Operators
+
+### NumPy
+
+- `logical_and`
+- `logical_or`
+- `logical_not`
+
+`np.logical_and(bmi > 21, bmi < 23)`
+
+- Here `bmi` is a NumPy array
+- Returns an NumPy array of True/False values
+
+`bmi[np.logical_and(bmi > 21, bmi < 23)]`
+
+## Filtering pandas DataFrames
+
+### Example Goal
+
+- Select the brics countries with area over 8 million km2
+
+- 3 steps
+  - Select the area column
+  - Do comparison on area column
+  - Use result to select the countries
+
+### Step 1: Get column
+
+- A couple different ways to do this
+
+`brics['area']`
+
+`brics.loc[:, 'area']`
+
+`brics.iloc[:, 2]`
+
+### Step 2: Compare
+
+`is_huge = brics['area'] > 8`
+
+### Step 3: Subset DataFrame
+
+`brics[is_huge]`
+
+### Boolean operators
+
+```
+import numpy as np
+
+brics[np.logical_and(brics['area'] > 8, brics['area'] < 10)]
+```
+
 # Loops
