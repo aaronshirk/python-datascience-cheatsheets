@@ -358,3 +358,11 @@ brics[np.logical_and(brics['area'] > 8, brics['area'] < 10)]
 ```
 
 # Loops
+
+## while loop
+
+## for loop
+
+## Loop Data Structures Part 1
+
+## Loop Data Structures Part 2
