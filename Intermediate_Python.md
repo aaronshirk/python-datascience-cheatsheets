@@ -361,8 +361,105 @@ brics[np.logical_and(brics['area'] > 8, brics['area'] < 10)]
 
 ## while loop
 
+### While
+
+```
+while condition:
+    expression
+```
+
+#### Example while
+
+```
+error = 50.0
+
+while error > 1:
+    error = error / 4
+    print(error)
+```
+
 ## for loop
+
+### for loop
+
+```
+for var in seq:
+    expression
+```
+
+### enumerate
+
+```
+fam = [1.1, 2.2, 3.3, 4.4]
+
+for index, num in enumerate(fam):
+    print("index " + str(index) + ": " + str(num))
+```
+
+### loop over a string
+
+```
+for c in "family":
+    print(c.capitalize())
+```
 
 ## Loop Data Structures Part 1
 
+### Dictionary
+
+```
+dict = {
+    "key1": "value1",
+    "key2": "value2",
+    "key3": "value3",
+}
+
+for key, value in dict.items():
+    print(key + " -- " + str(value))
+```
+
+### NumPy Arrays
+
+```
+import numpy as np
+np_values = np.array([1, 2, 3, 4])
+
+for val in np_values:
+    print(val)
+```
+
+### 2D NumPy Arrays
+
+```
+import numpy as np
+np_arr1 = np.array([1, 2, 3, 4])
+np_arr2 = np.array([5, 6, 7, 8])
+
+meas = np.array([np_arr1, np_arr2])
+
+for val in np.nditer(meas):
+    print(val)
+```
+
+### Recap
+
+- Dictionary
+
+  - for `key, value in my_dict.items(): `
+
+- NumPy array
+  - for `val in np.nditer(my_array)`
+
 ## Loop Data Structures Part 2
+
+### iterrows
+
+```
+import pandas as pd
+brics = pd.read_csv("brics.csv", index_col=0)
+for label, row in brics.iterrows():
+    print(label)
+    print(row)
+```
+
+### Selective print
