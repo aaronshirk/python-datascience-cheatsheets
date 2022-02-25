@@ -457,9 +457,41 @@ for val in np.nditer(meas):
 ```
 import pandas as pd
 brics = pd.read_csv("brics.csv", index_col=0)
+
 for label, row in brics.iterrows():
     print(label)
     print(row)
 ```
 
 ### Selective print
+
+```
+import pandas as pd
+brics = pd.read_csv("brics.csv", index_col=0)
+
+for label, row in brics.iterrows():
+    print(lab + ": " + row["capital"])
+```
+
+### Add column
+
+```
+import pandas as pd
+brics = pd.read_csv("brics.csv", index_col=0)
+
+for label, row in brics.iterrows():
+    # -     Creating Series on every iteration
+    brics["name_length"] = len(row["country"])
+```
+
+- This works but is fairly inefficient because it creates a Series on every iteration
+
+### apply
+
+```
+import pandas as pd
+brics = pd.read_csv("brics.csv", index_col=0)
+
+for label, row in brics.iterrows():
+    brics["name_length"] = brics["country"].apply(len)
+```
