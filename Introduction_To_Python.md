@@ -54,4 +54,63 @@
 
 # Functions and Packages
 
+## Functions
+
+### Basic notes
+
+- Piece of reusable code
+- Solves a particular task
+
+### Example max()
+
+```
+fam = [1.23, 1.68, 1.77, 1.45]
+max(fam)
+```
+
+- returns 1.77
+
+### round()
+
+`round(1.67, 1)`
+--> 1.7
+
+`round(1.67)`
+--> 2
+
+`help(round)`
+
+- `round(number)`
+- `round(number, ndigits)`
+
+## Methods
+
+- Functions that belong to objects
+
+### list methods
+
+`fam.index('mom')`
+
+- Returns the index of the value 'mom' in the list
+
+`fam.count(1.76)`
+
+- Returns the count of occurences of 1.76 in the list
+
+`fam.append('aaron')`
+
+- Appends the str = 'aaron' on the end of the list
+
+### str methods
+
+`sister = 'liz'`
+
+`sister.capitalize()`
+
+- Returns 'Liz'
+
+`sister.replace('z', 'sa')`
+
+- Returns 'lisa'
+
 # Numpy
