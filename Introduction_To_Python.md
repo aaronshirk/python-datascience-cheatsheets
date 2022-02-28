@@ -113,4 +113,29 @@ max(fam)
 
 - Returns 'lisa'
 
+## Packages
+
+### Packages notes
+
+- Directory of python scripts
+- Each script = module
+- Specify functions, methods, and types
+- Thousands of packages available
+  - NumPy
+  - Matplotlib
+  - scikit-learn
+
+### Install package
+
+- Download `get-pip.py`
+- Terminal:
+  - `python3 get-pip.py`
+  - `pip3 install numpy`
+
+### Import package
+
+- `import numpy`
+- `import numpy as np`
+- `from numpy import array`
+
 # Numpy
