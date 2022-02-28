@@ -152,3 +152,108 @@ ax[1].set_xlabel('Time (months)')
 ```
 fig, ax = plt.subplots(2, 1, sharey=True)
 ```
+
+## Plotting time-series data
+
+### Plotting time-series data
+
+```
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+ax.plot(climate_change.index, climate_change['co2'])
+ax.set_xlabel('Time')
+ax.set_ylabel('CO2 (ppm)')
+plot.show()
+```
+
+- In this example matplotlib automatically selected to show year on the x-axis in intervals of 10 years
+
+### Zooming in on a decade
+
+```
+sixties = climate_change['1960-01-01': '1969-12-31']
+fig, ax = plt.subplots()
+ax.plot(sixties.index, sixties['co2'])
+ax.set_xlabel('Time')
+ax.set_ylabel('CO2 (ppm)')
+plt.show()
+```
+
+## Plotting time-series data with different variables
+
+### Plotting two time-series together
+
+```
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+ax.plot(climate_change.index, climate_change['co2'])
+ax.plot(climate_change.index, climate_change['relative_temp'])
+ax.set_xlabel('Time')
+ax.set_ylabel('CO2 (ppm) / Relative temperature')
+plt.show()
+```
+
+- Plot doesn't look right
+- Problem: scales for the two measurements are different
+
+### Using twin axes
+
+```
+fig, ax = plt.subplots()
+ax.plot(climate_change.index, climate_change['co2'])
+ax.set_xlabel('Time')
+ax.set_ylabel('CO2 (ppm)')
+
+ax2 = ax.twinx()  # <-- This creates a 'twin axis' that shares the x-axis
+ax2.plot(climate_change.index, climate_change['relative_temp'])
+ax2.set_ylabel('Relative temperature (Celsius))
+plt.show()
+```
+
+### Separating variables by color
+
+```
+fig, ax = plt.subplots()
+ax.plot(climate_change.index, climate_change['co2'], color='blue')
+ax.set_xlabel('Time')
+ax.set_ylabel('CO2 (ppm)', color='blue')
+
+ax2 = ax.twinx()  # <-- This creates a 'twin axis' that shares the x-axis
+ax2.plot(climate_change.index, climate_change['relative_temp'], color='red')
+ax2.set_ylabel('Relative temperature (Celsius)', color='red')
+plt.show()
+```
+
+### Coloring the ticks
+
+```
+fig, ax = plt.subplots()
+ax.plot(climate_change.index, climate_change['co2'], color='blue')
+ax.set_xlabel('Time')
+ax.set_ylabel('CO2 (ppm)', color='blue')
+ax.tick_params('y', colors='blue')
+
+ax2 = ax.twinx()  # <-- This creates a 'twin axis' that shares the x-axis
+ax2.plot(climate_change.index, climate_change['relative_temp'], color='red')
+ax2.set_ylabel('Relative temperature (Celsius)', color='red')
+ax.tick_params('y', colors='red')
+plt.show()
+```
+
+### A function that plots time-series
+
+```
+def plot_timeseries(axes, x, y, color, xlabel, ylabel):
+    axes.plot(x, y, color=color)
+    axes.set_xlabel(xlabel)
+    axes.set_xlabel(ylabel, color=color)
+    axes.tick_params('y', colors=color)
+
+fig, ax = plt.subplots()
+plot_time_series(ax, climate_change.index, climate_change['co2'], 'blue', 'Time', 'CO2 (ppm)')
+
+ax2 = ax.twinx()
+plot_time_series(ax, climate_change.index, climate_change['relative_temp'], 'red', 'Time', 'Relative temperature (Celsius)')
+
+plt.show()
+```
