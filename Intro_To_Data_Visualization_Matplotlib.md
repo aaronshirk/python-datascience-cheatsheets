@@ -250,10 +250,141 @@ def plot_timeseries(axes, x, y, color, xlabel, ylabel):
     axes.tick_params('y', colors=color)
 
 fig, ax = plt.subplots()
-plot_time_series(ax, climate_change.index, climate_change['co2'], 'blue', 'Time', 'CO2 (ppm)')
+plot_timeseries(ax, climate_change.index, climate_change['co2'], 'blue', 'Time', 'CO2 (ppm)')
 
 ax2 = ax.twinx()
-plot_time_series(ax, climate_change.index, climate_change['relative_temp'], 'red', 'Time', 'Relative temperature (Celsius)')
+plot_timeseries(ax, climate_change.index, climate_change['relative_temp'], 'red', 'Time', 'Relative temperature (Celsius)')
 
 plt.show()
 ```
+
+## Annotating time-series data
+
+### Annotation
+
+```
+fig, ax = plt.subplots()
+plot_timeseries(ax, climate_change.index, climate_change['co2'], 'blue', 'Time', 'CO2 (ppm)')
+
+ax2 = ax.twinx()
+plot_timeseries(ax, climate_change.index, climate_change['relative_temp'], 'red', 'Time', 'Relative temperature (Celsius)')
+
+ax2.annotate(">1 degree", xy=[pd.TimeStamp("2015-10-06"), 1])  # <-- annotation
+plt.show()
+```
+
+- Sometimes the annotation doesn't look good or overlaps other text
+
+### Positioning the text
+
+```
+fig, ax = plt.subplots()
+plot_timeseries(ax, climate_change.index, climate_change['co2'], 'blue', 'Time', 'CO2 (ppm)')
+
+ax2 = ax.twinx()
+plot_timeseries(ax, climate_change.index, climate_change['relative_temp'], 'red', 'Time', 'Relative temperature (Celsius)')
+
+ax2.annotate(">1 degree", xy=(pd.TimeStamp("2015-10-06"), 1),
+                          xytext=(pd.TimeStamp("2008-10-06"), -0.2))  # <-- annotation
+plt.show()
+```
+
+- Here the **xytext** kwarg separates the text from the point of the annotation
+
+### Adding arrows to annotations
+
+```
+ax2.annotate(">1 degree", xy=(pd.TimeStamp("2015-10-06"), 1),
+                          xytext=(pd.TimeStamp("2008-10-06"), -0.2),
+                          arrowprops={})
+```
+
+- **arrowprops** arguement takes a dictionary
+- An empty dictionary, then the arrow gets the default props
+
+### Customizing arrow properties
+
+```
+ax2.annotate(">1 degree", xy=(pd.TimeStamp("2015-10-06"), 1),
+                          xytext=(pd.TimeStamp("2008-10-06"), -0.2),
+                          arrowprops={"arrowstyle": "->", "color": "gray"})
+```
+
+- [Customizing annotations](https://matplotlib.org/users/annotations.html)
+
+# Quantitative comparisons and statistical visualizations
+
+## Quantitative comparisons: bar-charts
+
+### Olympic medals: visualizing the data
+
+- Here the olympic medals dataframe has country name as the index
+
+```
+medals = pd.csv_read('medals_by_country_2016.csv', index_col=0)
+fig, ax = pd.subplots()
+ax.bar(medals.index, medals["Gold"])
+plt.show()
+```
+
+- Bar chart looks ok, but the country names overlap
+
+### Interlude: rotate the tick labels
+
+```
+fig, ax = pd.subplots()
+ax.bar(medals.index, medals["Gold"])
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
+plt.show()
+```
+
+### Olympic medals: visualizing the other medals
+
+- Can use a stacked bar chart
+
+```
+fig, ax = pd.subplots()
+ax.bar(medals.index, medals["Gold"])
+ax.bar(medals.index, medals["Silver"], bottom=medals["Gold"])
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
+plt.show()
+```
+
+### Olympic medals: visualizing all three
+
+- Can use a stacked bar chart
+
+```
+fig, ax = pd.subplots()
+ax.bar(medals.index, medals["Gold"])
+ax.bar(medals.index, medals["Silver"], bottom=medals["Gold"])
+ax.bar(medals.index, medals["Bronze"], bottom=medals["Silver"] + medals["Gold"])
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
+plt.show()
+```
+
+### Adding a legend
+
+- Can use a stacked bar chart
+
+```
+fig, ax = pd.subplots()
+ax.bar(medals.index, medals["Gold"], label="Gold")
+ax.bar(medals.index, medals["Silver"], bottom=medals["Gold"], label="Silver")
+ax.bar(medals.index, medals["Bronze"], bottom=medals["Silver"] + medals["Gold"], label="Bronze")
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
+ax.legend()
+plt.show()
+```
+
+## Quantitative comparisons: histograms
+
+## Quantitative comparisons: statistical plotting
+
+## Quantitative comparisons: scatter plots
+
+# Sharing visualizations with others
