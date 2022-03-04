@@ -383,7 +383,116 @@ plt.show()
 
 ## Quantitative comparisons: histograms
 
+### Introducting histograms
+
+```
+fig, ax = pd.subplots()
+ax.hist(mens_rowing["Height"])
+ax.hist(mens_gymnastics["Height"])
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("Number of observations")
+plt.show()
+```
+
+### Labels are needed
+
+```
+ax.hist(mens_rowing["Height"], label="Rowing")
+ax.hist(mens_gymnastics["Height"], label="Gymnastics")
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("Number of observations")
+ax.legend()
+plt.show()
+```
+
+### Customizing histograms: setting the number of bins
+
+```
+ax.hist(mens_rowing["Height"], label="Rowing", bins=5)
+ax.hist(mens_gymnastics["Height"], label="Gymnastics", bins=5)
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("Number of observations")
+ax.legend()
+plt.show()
+```
+
+### Customizing histograms: setting bin boundaries
+
+```
+ax.hist(mens_rowing["Height"], label="Rowing",
+                bins=[150, 160, 170, 180, 190, 200, 210])
+ax.hist(mens_gymnastics["Height"], label="Gymnastics",
+                bins=[150, 160, 170, 180, 190, 200, 210])
+
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("Number of observations")
+ax.legend()
+plt.show()
+```
+
+### Customizing histograms: transparency
+
+```
+ax.hist(mens_rowing["Height"], label="Rowing",
+                bins=[150, 160, 170, 180, 190, 200, 210],
+                histtype="step")
+ax.hist(mens_gymnastics["Height"], label="Gymnastics",
+                bins=[150, 160, 170, 180, 190, 200, 210],
+                histtype="step")
+
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("Number of observations")
+ax.legend()
+plt.show()
+```
+
+- This will show the outline of this histogram, making it look transparent
+
 ## Quantitative comparisons: statistical plotting
+
+### Adding error bars to bar charts
+
+```
+fig, ax = pd.subplots()
+
+ax.bar("Rowing", mens_rowing["Height"].mean(),
+                yerr=mens_rowing["Height"].std())
+
+ax.bar("Gymnastics", mens_gymnastics["Height"].mean(),
+                yerr=mens_gymnastics["Height"].std())
+
+ax.set_xlabel("Height (cm)")
+
+plt.show()
+```
+
+### Adding error bars to line plots
+
+```
+fig, ax = plt.subplots()
+
+ax.errorbar(seattle_weather["MONTH"],
+                seattle_weather["MLY-TAVG-NORMAL],
+                seattle_weather["MLY-TAVG-STDDEV"])
+
+ax.errorbar(austin_weather["MONTH"],
+                austin_weather["MLY-TAVG-NORMAL"],
+                 austin_weather["MLY-TAVG-STDDEV"])
+
+ax.set_ylabel("Temperature (Fahrenheit)")
+
+plt.show()
+```
+
+### Adding boxplots
+
+```
+fig, ax = plt.subplots()
+ax.boxplot([mens_rowing["Height"], mens_gymnastics["Height"]])
+ax.set_xticklabels(["Rowing", "Gymnastics"])
+ax.set_ylabel("Height (cm)")
+plt.show()
+```
 
 ## Quantitative comparisons: scatter plots
 
