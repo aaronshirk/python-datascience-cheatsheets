@@ -544,6 +544,132 @@ plt.show()
 
 ## Preparing your figures to share with others
 
+### Choosing a style
+
+```
+plt.style.use("ggplot")
+fig, ax = plt.subplots()
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL])
+ax.plot(austin_weather["MONTH"], austin_weather["MLY-TAVG-NORMAL])
+ax.set_xlabel("Time (months)")
+ax.set_ylabel("Average temperature (Fahrenheit degrees)")
+plt.show()
+```
+
+- **plt.style.use** changes the style of the plot
+- **ggplot** emulates the R library ggplot
+
+### Back to the default
+
+```
+plt.style.use("default")
+```
+
+### The available styles
+
+- [Matplotlib style sheet reference](https://matplotlib.org/3.5.1/gallery/style_sheets/style_sheets_reference.html)
+
+### Other styles
+
+- "bmh": `plt.style.use('bmh')`
+- "Seaborn stules": `plt.style.use('seaborn-colorblind')`
+
+### Guidelines for choosing styles
+
+- Dark backgrounds are usually less visible
+- If color is important, consider using color-blind friendly options
+  - "seaborn-colorblind" or "tableau-colorblind10"
+- If you think that someone will want to print your figure, use less ink
+- If it will be printed in black-and-white, use the "grayscale" style
+
 ## Saving your visualizations
 
+### Saving a figure to a file
+
+```
+fig, ax = pd.subplots()
+ax.bar(medals.index, medals["Gold"])
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
+
+fig.savefig("gold_medals.png")
+```
+
+### Different file formats
+
+```
+fig.savefig("gold_medals.jpg")
+```
+
+```
+fig.savefig("gold_medals.jpg", quality=50)
+```
+
+```
+fig.savefig("gold_medals.svg")
+```
+
+### Resolution
+
+```
+fig.savefig("gold_medals.png", dpi=300)
+```
+
+### Figure size
+
+```
+fig.set_size_inches([5,3])
+```
+
+- first number = width, second number = height
+
+### Another aspect ratio
+
+```
+fig.set_size_inches([3,5])
+```
+
 ## Automating figures from data
+
+### Why automate?
+
+- Ease and speed
+- Flexibility
+- Robustness
+- Reproducibility
+
+### How many different kinds of data
+
+- Sometimes we don't know in advance how many different categories of data are in a dataframe
+- For example, how many types of sports in a sports dataframe
+
+```
+summer_2016_medals["Sport"]
+```
+
+- This returns a series with the diferent sports in the summer 2016 olympics
+
+### Getting unique values of a column
+
+```
+sports = summer_2016_medals["Sport"].unique()
+```
+
+- This returns the unique sports in the sport column
+
+### Bar-chart of heights for all sports
+
+```
+sports = summer_2016_medals["Sport"].unique()
+
+fig, ax = plt.subplots()
+
+for sport in sports:
+    sport_df = summer_2016_medals[summer_2016_medals["Sport"] == sport]
+    ax.bar(sport, sport_df["Height"].mean(),
+                yerr=sport_df["Height"].std())
+
+ax.set_ylabel("Height (cm)")
+ax.set_xticklabels(sports, rotation=90)
+plt.show()
+```

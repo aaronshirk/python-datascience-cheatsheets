@@ -365,11 +365,7 @@ direction='forward'))
 ```
 
 df2 = df1.melt(id_vars=['column1', 'column2'],
-value_vars=['column3', 'column4'],
-var_name=['name1'], value_name='name2')
-
-```
-
-```
+    value_vars=['column3', 'column4'],
+    var_name=['name1'], value_name='name2')
 
 ```
