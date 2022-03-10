@@ -285,6 +285,67 @@ plt.show()
 
 - You can also use **row_order** to organize the row value order
 
+## Customizing scatter plots
+
+- Customizations looked at here
+  - Subgroups with point size and stle
+  - Changing point transparency
+
+### Subgroups with point size
+
+```
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="total_bill", y="tip",
+                data=tips, kind="scatter",
+                size="size")
+plt.show()
+```
+
+- Here **size** points to the size variable, representing the size of the group or party
+
+### Point size and hue
+
+```
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="total_bill", y="tip",
+                data=tips, kind="scatter",
+                size="size", hue="size")
+plt.show()
+```
+
+### Subgroups with point style
+
+```
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="total_bill", y="tip",
+                data=tips, kind="scatter",
+                hue="smoker", style="smoker")
+plt.show()
+```
+
+- Point style will vary by the value of the smoker variable
+
+### Changing point transparency
+
+```
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# set alpha between 0 and 1
+sns.relplot(x="total_bill", y="tip",
+                data=tips, kind="scatter",
+                alpha=0.4)
+plt.show()
+```
+
+- Here, darker areas of the chart will indicate more observations
+
 # Visualizing a Categorical and a Quantitative Varaible
 
 # Customizing Seaborn Plots
