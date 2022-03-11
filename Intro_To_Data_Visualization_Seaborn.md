@@ -188,7 +188,7 @@ plt.show()
 
 - Create "relational plots": scatter or line plots
 
-Why use **relplot()## instead of **scatterplot()\*\* ?
+Why use **relplot()** instead of **scatterplot()** ?
 
 - **relplot()** lets you create subplots in a single figure
 
@@ -288,7 +288,7 @@ plt.show()
 ## Customizing scatter plots
 
 - Customizations looked at here
-  - Subgroups with point size and stle
+  - Subgroups with point size and style
   - Changing point transparency
 
 ### Subgroups with point size
@@ -345,6 +345,164 @@ plt.show()
 ```
 
 - Here, darker areas of the chart will indicate more observations
+
+## Introduction to line plots
+
+### What are line plots?
+
+- Seaborn offers two types of relational plots: line and scatter
+- Scatter plots:
+  - Each plot point is an independent observation
+- Line plots:
+
+  - Each plot point represents the same "thing", typically tracked over time
+
+- This chapter used air pollution data as a sample
+
+### Scatter plot
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.relplot(x="hour", y="NO_2_mean",
+            data=air_df_mean, kind="scatter")
+
+plt.show()
+```
+
+### Line plot
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.relplot(x="hour", y="NO_2_mean",
+            data=air_df_mean, kind="line")
+
+plt.show()
+```
+
+### Subgroups by location
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.relplot(x="hour", y="NO_2_mean",
+            data=air_df_loc_mean,
+            kind="line",
+            style="location",
+            hue="location")
+
+plt.show()
+```
+
+- Produces multiple lines that vary by style and color, and has a legend
+
+### Adding markers
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.relplot(x="hour", y="NO_2_mean",
+            data=air_df_loc_mean,
+            kind="line",
+            style="location",
+            hue="location",
+            markers=True)
+
+plt.show()
+```
+
+- The kwarg = **markers** puts a mark for each data point
+- The line marker style will vary by the style parameter (dot, square, x, etc)
+
+## Turning off line style
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.relplot(x="hour", y="NO_2_mean",
+            data=air_df_loc_mean,
+            kind="line",
+            style="location",
+            hue="location",
+            markers=True,
+            dashes=False)
+
+plt.show()
+```
+
+- The kwarg = **dashes** as false, allows you to keep the markers but turn off the line style
+
+### Multiple observations per x-value
+
+#### Svatter plot
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.relplot(x="hour", y="NO_2",
+            data=air_df,
+            kind="scatter")
+
+plt.show()
+```
+
+- If the df has multiple observations / x-value, then each observation will be shown in the scatter plot
+
+#### Line plot
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.relplot(x="hour", y="NO_2",
+            data=air_df,
+            kind="line")
+
+plt.show()
+```
+
+- By default seaborn will aggregate the measurement as the mean, and show it as a line
+- Also shows a shaded region that represents the 95% confidence interval for the mean
+  - Assumes the dataset is a random sample
+  - 95% confident that the mean is within the interval
+  - Indicates uncertainty in our estimate
+
+### Replacing confidence interval with standard deviation
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.relplot(x="hour", y="NO_2",
+            data=air_df,
+            kind="line",
+            ci="sd")
+
+plt.show()
+```
+
+- Shows the spread of the distribution of observations at each x value
+
+### Turning off confidence interval
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.relplot(x="hour", y="NO_2",
+            data=air_df,
+            kind="line",
+            ci=None)
+
+plt.show()
+```
 
 # Visualizing a Categorical and a Quantitative Varaible
 
