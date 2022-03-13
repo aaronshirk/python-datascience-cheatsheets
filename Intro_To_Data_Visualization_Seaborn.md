@@ -440,7 +440,7 @@ plt.show()
 
 ### Multiple observations per x-value
 
-#### Svatter plot
+#### Scatter plot
 
 ```
 import matplotlib.pyplot as plt
@@ -505,6 +505,117 @@ plt.show()
 ```
 
 # Visualizing a Categorical and a Quantitative Varaible
+
+## Count plots and bar plots
+
+### Categorical plots
+
+- Examples: count plots, bar plots
+- Involve a categorical value
+- Comparisons between groups
+
+### catplot()
+
+- Used to create categorical plots
+- Same advantages of **relplots()**
+- Easily create subplots with row= and col=
+
+### countplot() vs catplot()
+
+#### countplot()
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.countplot(x="how_masculine", data=masculinity_data)
+plt.show()
+```
+
+#### catplot()
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="how_masculine",
+            data=masculinity_data,
+            kind="count")
+plt.show()
+```
+
+### Changing the order
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+category_order = ["No answer", "Not at all",
+                  "Not very", "Somewhat", "Very"]
+
+sns.catplot(x="how_masculine",
+            data=masculinity_data,
+            kind="count",
+            order=category_order)
+plt.show()
+```
+
+### Bar plots
+
+- Display the mean of a quantitative variable per category
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="day",
+            y="total_bill",
+            data=tips,
+            kind="bar")
+plt.show()
+```
+
+- By default the Seaborn bar plot will show 95% confidence interval
+
+### Confidence intervals
+
+- Lines show 95% confidence intervals for the mean
+- Shows uncertainty about out estimate
+- Assumes our data is a random sample
+
+### Turning off confidence intervals
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="day",
+            y="total_bill",
+            data=tips,
+            kind="bar",
+            ci=None)
+plt.show()
+```
+
+### Changing the orientation
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="total_bill",
+            y="day",
+            data=tips,
+            kind="bar")
+plt.show()
+```
+
+- Flip the x and y values to change the orientation
+- While this can work, it's pretty standard to see the categorical value on the x axis
+
+## Box plots
+
+## Point plots
 
 # Customizing Seaborn Plots
 
