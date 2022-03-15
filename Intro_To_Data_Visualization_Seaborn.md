@@ -615,7 +615,185 @@ plt.show()
 
 ## Box plots
 
+### What is a box plot?
+
+- Shows the distribution of quantitative data
+- See median, spread, skewness, and outliers
+- Facilitates comparisons between groups
+
+### How to create a box plot
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="time",
+            y="total_bill",
+            data=tips,
+            kind="box")
+plt.show()
+```
+
+- Draws a box plot
+- Colored box represents the 25% - 75% percentile, or IQR
+- Line in the middle of the box represents the median
+- Whisters give a sense of the spread of the data
+- Dots represent the outliers
+
+### Change the order of categories
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="time",
+            y="total_bill",
+            data=tips,
+            kind="box",
+            order=["Dinner", "Lunch"])
+plt.show()
+```
+
+### Omitting the outliers using 'sym'
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="time",
+            y="total_bill",
+            data=tips,
+            kind="box",
+            sym="")
+plt.show()
+```
+
+- Here the **sym** arg has an empty string
+
+### Changing the whiskers using 'whis'
+
+- By default the whiskers extend to 1.5 \* the interquartile range (IQR)
+- Make them extend to 2.0 \* IQR: `whis=2.0`
+- Show the 5th and 95th percentiles: `whis=[5, 95]`
+- Show min and max values: `whis=[0, 100]`
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="time",
+            y="total_bill",
+            data=tips,
+            kind="box",
+            whis=[0, 100])
+plt.show()
+```
+
 ## Point plots
+
+### What are point plots?
+
+- Points show the mean of a quantitative variable
+- Vertical lines show the 95% confidence interval of the mean
+
+### Point plots vs line plots
+
+Both show:
+
+- Mean of quantitative variable
+- 95% confidence interval of the mean
+
+Differences:
+
+- Line plot has a quantitative variable (usually time) on the x-axis
+- Point plot has a categorical variable on the x-axis
+
+### Point plots vs bar plots
+
+Both show:
+
+- Mean of quantitative variable
+- 95% confidence interval of the mean
+
+### Creating a point plot
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="age",
+            y="masculinity_important",
+            data=masculinity_data,
+            hue="feel_masculine",
+            kind="point")
+
+plt.show()
+```
+
+### Disconnecting the points
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="age",
+            y="masculinity_important",
+            data=masculinity_data,
+            hue="feel_masculine",
+            kind="point",
+            join=False)
+
+plt.show()
+```
+
+### Displaying the median
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+from numpy import median
+
+sns.catplot(x="age",
+            y="masculinity_important",
+            data=masculinity_data,
+            hue="feel_masculine",
+            kind="point",
+            estimator=median)
+
+plt.show()
+```
+
+### Customizing the confidence intervals
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="age",
+            y="masculinity_important",
+            data=masculinity_data,
+            hue="feel_masculine",
+            kind="point",
+            capsize=0.2)
+
+plt.show()
+```
+
+### Turning off confidence intervals
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="age",
+            y="masculinity_important",
+            data=masculinity_data,
+            hue="feel_masculine",
+            kind="point",
+            ci=None)
+
+plt.show()
+```
 
 # Customizing Seaborn Plots
 
