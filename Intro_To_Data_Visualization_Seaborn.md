@@ -797,6 +797,55 @@ plt.show()
 
 # Customizing Seaborn Plots
 
-```
+## Customizing plot style and color
+
+### Why customize?
+
+- Personal preference
+- Improve readability
+- Guide interpretation
+
+### Changing the figure style
+
+- Figure "style" includes background and axes
+- Preset options: "white", "dark", "whitegrid", "darkgrid", "ticks"
+- `sns.set_style()`
+- Default style is "white"
+
+### Changing the palette
+
+- Figure "palette" changes the color of the main elements of the plot
+- `sns.set_palette()`
+- Use preset palettes or create a custom palette
+
+### Diverging palettes
+
+- Good to use for scales where the two ends are opposite with a nuetral mid-point
+- "RdBu"
+- "PRGn"
+- "RdBu_r"
+- "PRGn_r"
+
+### Sequential palettes
+
+- Great for emphasizing a variable on a continuous scale
+- "Greys"
+- "Blues"
+- "PuRd"
+- "GnBu"
+
+### Custom palette
 
 ```
+custom_palette = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
+
+sns.set_palette(custom_palette)
+```
+
+- Can also use color hex codes as well
+
+### Changing the scale
+
+- Figure "context" changes the scale of the plot elements and labesl
+- `sns.set_context()`
+- Smallest to largest: "paper", "notebook", "talk", "poster"
