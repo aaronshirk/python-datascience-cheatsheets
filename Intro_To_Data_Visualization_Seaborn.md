@@ -849,3 +849,130 @@ sns.set_palette(custom_palette)
 - Figure "context" changes the scale of the plot elements and labesl
 - `sns.set_context()`
 - Smallest to largest: "paper", "notebook", "talk", "poster"
+
+## Adding title and labels: Part 1
+
+### FacetGrid vs AxesSubplot objects
+
+- Seaborn plots create two different types of objects: `FacetGrid` and `AxesSubplot`
+- Can tell which type capturing the object in a variable and using the type() function
+
+```
+g = sns.scatterplot(x="height", y="weight", data=df)
+type(g)
+```
+
+- The **scatterplot()** function returns: `matplotlib.axes._subplots.AxesSubplot`
+
+### An empty FacetGrid
+
+- A FacetGrid object can have multiple subplots
+- Seaborn functions like `catplot()` and `relplot()` return FacetGrid objects
+
+### FacetGrid vs. AxesSubplot objects
+
+| Object Type | Plot Types                          | Characteristics            |
+| ----------- | ----------------------------------- | -------------------------- |
+| FacetGrid   | `relplot()`, `catplot()`            | Can create subplots        |
+| AxesSubplot | `scatterplot()`, `countplot()`, etc | Only creates a single plot |
+
+### Adding a title to FacetGrid
+
+```
+g = sns.catplot(x="Region",
+                y="Birthrate",
+                data=gdp_data,
+                kind="box")
+g.fig.suptitle("New Title")
+plt.show()
+```
+
+### Adjusting height of title in FacetGrid
+
+```
+g = sns.catplot(x="Region",
+                y="Birthrate",
+                data=gdp_data,
+                kind="box")
+
+g.fig.suptitle("New Title",
+              y=1.03)
+plt.show()
+```
+
+## Adding titles and labels: Part 2
+
+### Adding a title to AxesSubplot
+
+#### FacetGrid
+
+```
+g = sns.catplot(x="Region",
+                y="Birthrate",
+                data=gdp_data,
+                kind="box")
+
+g.fig.suptitle("New Title",
+              y=1.03)
+plt.show()
+```
+
+### AxesSubplot
+
+```
+g = sns.boxplot(x="Region",
+                y="Birthrate",
+                data=gdp_data)
+
+g.set_title("New Title",
+              y=1.03)
+plt.show()
+```
+
+### Titles for subplots
+
+```
+g = sns.catplot(x="Region",
+                y="Birthrate",
+                data=gdp_data,
+                kind="box",
+                col="Group")
+
+g.fig.suptitle("New Title",
+              y=1.03)
+
+g.set_titles("This is {col_name}")
+
+plt.show()
+```
+
+- The `g.fig.suptitle()` adds the title to the entire figure
+- The `g.set_titles()` adds a title to each subolot
+- You can specify the column name using the variable `col_name`
+
+### Adding axis labels
+
+```
+g = sns.catplot(x="Region",
+                y="Birthrate",
+                data=gdp_data,
+                kind="box")
+
+g.set(xlabel="New X Label", ylabel="New Y Label")
+
+plt.show()
+```
+
+### Rotating x-axis tick labels
+
+```
+g = sns.catplot(x="Region",
+                y="Birthrate",
+                data=gdp_data,
+                kind="box")
+
+plt.xticks(rotation=90)
+plt.show()
+```
+
+- xticks are set by calling the `xticks()` method on matplotlib directly
