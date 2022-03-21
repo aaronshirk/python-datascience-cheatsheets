@@ -846,7 +846,7 @@ sns.set_palette(custom_palette)
 
 ### Changing the scale
 
-- Figure "context" changes the scale of the plot elements and labesl
+- Figure "context" changes the scale of the plot elements and labels
 - `sns.set_context()`
 - Smallest to largest: "paper", "notebook", "talk", "poster"
 
@@ -976,3 +976,85 @@ plt.show()
 ```
 
 - xticks are set by calling the `xticks()` method on matplotlib directly
+
+## Putting it all together
+
+### Getting started
+
+To import Seaborn:
+
+```
+import seaborn as sns
+```
+
+To import matplotlib:
+
+```
+import matplotlib.pyplot as plt
+```
+
+To show a plot:
+
+```
+plt.show()
+```
+
+### Relational plots
+
+- Show the relationship between two quantitative variables
+- Examples: scatter plots, line plots
+
+```
+sns.relplot(x="x_variable_name",
+            y="y_variable_name",
+            data=pandas_df,
+            kind="scatter")
+```
+
+### Categorical plots
+
+- Show the distribution of a quantitative variable within categories defined by a categorical variable
+- Examples: bar plots, count plots, box plots, point plots
+
+```
+sns.catplot(x="x_variable_name",
+            y="y_variable_name",
+            data=pandas_df,
+            kind="bar")
+```
+
+### Adding a third variable (hue)
+
+Setting `hue` will create subgroups that are displayed as different colors on a single plot.
+
+### Adding a third variable (row/col)
+
+Setting `row` and/or `col` in `relplot()` or `catplot()` will create subgroups that are displayed on separate subplots.
+
+### Customization
+
+- Change the background: `sns.set_style()`
+- Change the main element colors: `sns.set_palette()`
+- Change the scale: `sns.set_context()`
+
+### Adding a title
+
+| Object Type | Plot Types                          | Characteristics    |
+| ----------- | ----------------------------------- | ------------------ |
+| FacetGrid   | `relplot()`, `catplot()`            | `g.fig.suptitle()` |
+| AxesSubplot | `scatterplot()`, `countplot()`, etc | `g.set_title()`    |
+
+### Final touches
+
+Add x- and y-axis labels:
+
+```
+g.set(xlabel="new x-axis label",
+      ylabel="new y-axis label")
+```
+
+Rotate x-tick labels:
+
+```
+plt.xticks(rotation=90)
+```
