@@ -120,7 +120,7 @@ print(type(d))
 print(d[:3])
 ```
 
-## Using pandas to import flat files ad DataFrames(1)
+## Using pandas to import flat files as DataFrames(1)
 
 ```
 # Import pandas as pd
@@ -136,7 +136,7 @@ df = pd.read_csv(file)
 print(df.head())
 ```
 
-## Using pandas to import flat files ad DataFrames(2)
+## Using pandas to import flat files as DataFrames(2)
 
 ```
 # Assign the filename: file
@@ -475,4 +475,94 @@ df = pd.read_sql_query('select * from PlaylistTrack inner join Track on Playlist
 
 # Print head of DataFrame
 print(df.head())
+```
+
+# Importing data from the internet
+
+## Importing flat files from web with urllib.urlretrieve
+
+```
+# Import package
+from urllib.request import urlretrieve
+
+# Import pandas
+import pandas as pd
+
+# Assign url of file: url
+url = 'https://assets.datacamp.com/production/course_1606/datasets/winequality-red.csv'
+
+# Save file locally
+urlretrieve(url, 'winequality-red.csv')
+
+# Read file into a DataFrame and print its head
+df = pd.read_csv('winequality-red.csv', sep=';')
+print(df.head())
+```
+
+## Opening and reading flat files from the web: pandas
+
+```
+# Import packages
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Assign url of file: url
+url = 'https://assets.datacamp.com/production/course_1606/datasets/winequality-red.csv'
+
+# Read file into a DataFrame: df
+df = pd.read_csv(url, sep=';')
+
+# Print the head of the DataFrame
+print(df.head())
+
+# Plot first column of df
+df.iloc[:, 0].hist()
+plt.xlabel('fixed acidity (g(tartaric acid)/dm$^3$)')
+plt.ylabel('count')
+plt.show()
+```
+
+## Importing non-flat files from web: pandas
+
+Note that the output of pd.read_excel() is a Python dictionary with sheet names as keys and corresponding DataFrames as corresponding values.
+
+```
+# Import package
+import pandas as pd
+
+# Assign url of file: url
+url = 'https://assets.datacamp.com/course/importing_data_into_r/latitude.xls'
+
+# Read in all sheets of Excel file: xls
+xls = pd.read_excel(url, sheet_name=None)
+
+# Print the sheetnames to the shell
+print(xls.keys())
+
+# Print the head of the first sheet (using its name, NOT its index)
+sheet1 = xls['1700']
+print(sheet1.head())
+```
+
+## Performing HTTP requests in Python using urllib
+
+```
+# Import packages
+from urllib.request import urlopen, Request
+
+# Specify the url
+url = "https://campus.datacamp.com/courses/1606/4135?ex=2"
+
+# This packages the request: request
+request = Request(url)
+
+# Sends the request and catches the response: response
+response = urlopen(request)
+
+# Print the datatype of response
+print(type(response))
+
+# Be polite and close the response!
+response.close()
+
 ```

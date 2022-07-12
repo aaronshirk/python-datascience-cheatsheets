@@ -586,3 +586,101 @@ print = run_n_times(20)(print)
 
 print('What is happening?!?!')
 ```
+
+## HTML Generator decorator factory
+
+Example of a decorator that can wrap a string in html tags.
+
+1. Define the decorator factory
+
+```
+def html(open_tag, close_tag):
+  def decorator(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+      msg = func(*args, **kwargs)
+      return '{}{}{}'.format(open_tag, msg, close_tag)
+    # Return the decorated function
+    return wrapper
+  # Return the decorator
+  return decorator
+```
+
+2. Wrap string in bold text
+
+```
+# Make hello() return bolded text
+@html('<b>', '</b>')
+def hello(name):
+  return 'Hello {}!'.format(name)
+  
+print(hello('Alice'))
+```
+
+3. Wrap string in italic text
+
+```
+# Make goodbye() return italicized text
+@html('<i>', '</i>')
+def goodbye(name):
+  return 'Goodbye {}.'.format(name)
+  
+print(goodbye('Alice'))
+```
+
+4. Wrap strings in divs
+
+```
+# Wrap the result of hello_goodbye() in <div> and </div>
+@html('<div>', '</div>')
+def hello_goodbye(name):
+  return '\n{}\n{}\n'.format(hello(name), goodbye(name))
+  
+print(hello_goodbye('Alice'))
+```
+
+## Tag your functions decorator
+
+```
+def tag(*tags):
+  # Define a new decorator, named "decorator", to return
+  def decorator(func):
+    # Ensure the decorated function keeps its metadata
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+      # Call the function being decorated and return the result
+      return func(*args, **kwargs)
+    wrapper.tags = tags
+    return wrapper
+  # Return the new decorator
+  return decorator
+
+@tag('test', 'this is a tag')
+def foo():
+  pass
+
+print(foo.tags)
+```
+
+## Decorator type checker
+
+```
+def returns(return_type):
+  # Complete the returns() decorator
+  def decorator(func):
+    def wrapper(*args, **kwargs):
+      result = func(*args, **kwargs)
+      assert type(result) == return_type
+      return result
+    return wrapper
+  return decorator
+  
+@returns(dict)
+def foo(value):
+  return value
+
+try:
+  print(foo([1,2,3]))
+except AssertionError:
+  print('foo() did not return a dict!')
+```
