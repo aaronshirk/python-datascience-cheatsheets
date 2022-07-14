@@ -103,9 +103,11 @@ mult_full_term_weight = birth_weight[~single & full_term]
 print('Multiple full-term mean:', mult_full_term_weight.mean())
 ```
 
-# Probability mass functions
+# Distributions
 
 ## Make a PMF
+
+PMF = Probability Mass Function
 
 `Pmf` used here is a class created by the instructor
 
@@ -139,6 +141,8 @@ Note: You can also use `pmf_age.plot()` to create a line plot
 
 
 ## Make a CDF
+
+CDF = Cumulative Distribution Function
 
 ```
 # Select the age column
@@ -187,3 +191,106 @@ plt.ylabel('CDF')
 plt.show()
 ```
 
+## Extract education levels
+
+```
+# Select educ
+educ = gss['educ']
+
+# Bachelor's degree
+bach = (educ >= 16)
+print(bach.head())
+
+# Associate degree
+assc = (educ >= 14) & (educ < 16)
+print(assc.head())
+
+# High school (12 or fewer years of education)
+high = (educ <= 12)
+print(high.mean())
+```
+
+## Plot income CDFs
+
+```
+income = gss['realinc']
+
+# Plot the CDFs
+Cdf(income[high]).plot(label='High school')
+Cdf(income[assc]).plot(label='Associate')
+Cdf(income[bach]).plot(label='Bachelor')
+
+# Label the axes
+plt.xlabel('Income (1986 USD)')
+plt.ylabel('CDF')
+plt.legend()
+plt.show()
+```
+
+## Modeling Distributions
+
+Pros and Cons of different distribution types:
+* Use CDFs for exploration as it smooths out randomness
+* Use PMFs if there are a small number of unique values
+* Use KDE if there are a lot of values
+
+## Distribution of income
+
+```
+# Extract realinc and compute its log
+income = gss['realinc']
+log_income = np.log10(income)
+
+# Compute mean and standard deviation
+mean = log_income.mean()
+std = log_income.std()
+print(mean, std)
+
+# Make a norm object
+from scipy.stats import norm
+dist = norm(mean, std)
+```
+
+## Comparing CDFs
+
+```
+# Evaluate the model CDF
+xs = np.linspace(2, 5.5)
+ys = dist.cdf(xs)
+
+# Plot the model CDF
+plt.clf()
+plt.plot(xs, ys, color='gray')
+
+# Create and plot the Cdf of log_income
+Cdf(log_income).plot()
+    
+# Label the axes
+plt.xlabel('log10 of realinc')
+plt.ylabel('CDF')
+plt.legend()
+plt.show()
+```
+
+## Comparing PDFs
+
+```
+# Evaluate the normal PDF
+xs = np.linspace(2, 5.5)
+ys = dist.pdf(xs)
+
+# Plot the model PDF
+plt.clf()
+plt.plot(xs, ys, color='gray')
+
+# Plot the data KDE
+sns.kdeplot(log_income)
+
+# Label the axes
+plt.xlabel('log10 of realinc')
+plt.ylabel('PDF')
+plt.legend()
+plt.show()
+```
+
+# Exploring relationships
