@@ -294,3 +294,191 @@ plt.show()
 ```
 
 # Exploring relationships
+
+Here looking at more than one variable
+
+## PMF of age
+
+Start off looking at one variable at a time.  It's helpful to get distributions of the variables first.
+
+```
+# Extract age
+age = brfss['AGE']
+
+
+# Plot the PMF
+pmf_age = Pmf(age)
+pmf_age.bar()
+
+# Label the axes
+plt.xlabel('Age in years')
+plt.ylabel('PMF')
+plt.show()
+```
+
+## Use a scatter plot of age and weight
+
+```
+# Select the first 1000 respondents
+brfss = brfss[:1000]
+
+# Extract age and weight
+age = brfss['AGE']
+weight = brfss['WTKG3']
+
+# Make a scatter plot
+plt.plot(age, weight, 'o', alpha=0.1)
+
+
+plt.xlabel('Age in years')
+plt.ylabel('Weight in kg')
+
+plt.show()
+```
+
+## Add jittering to add random noise to the data
+
+This can help in a case where values have been rounded, like ages rounded into 5 yr bins.
+
+```
+# Select the first 1000 respondents
+brfss = brfss[:1000]
+
+# Add jittering to age
+age = brfss['AGE'] + np.random.normal(0, 2.5, size=len(brfss))
+# Extract weight
+weight = brfss['WTKG3']
+
+# Make a scatter plot
+plt.plot(age, weight, 'o', markersize=5, alpha=0.2)
+
+plt.xlabel('Age in years')
+plt.ylabel('Weight in kg')
+plt.show()
+```
+
+## Height and weight box plot
+
+```
+# Drop rows with missing data
+data = brfss.dropna(subset=['_HTMG10', 'WTKG3'])
+
+# Make a box plot
+sns.boxplot(x='_HTMG10', y='WTKG3', data=data, whis=10)
+
+# Plot the y-axis on a log scale
+plt.yscale('log')
+
+# Remove unneeded lines and label axes
+sns.despine(left=True, bottom=True)
+plt.xlabel('Height in cm')
+plt.ylabel('Weight in kg')
+plt.show()
+```
+
+## Check distribution of income using bar plot again
+
+```
+# Extract income
+income = brfss['INCOME2']
+
+# Plot the PMF
+Pmf(income).bar()
+
+# Label the axes
+plt.xlabel('Income level')
+plt.ylabel('PMF')
+plt.show()
+```
+
+## Income and height with violin plot
+
+```
+# Drop rows with missing data
+data = brfss.dropna(subset=['INCOME2', 'HTM4'])
+
+# Make a violin plot
+sns.violinplot(x='INCOME2', y='HTM4', data=data, inner=None)
+
+# Remove unneeded lines and label axes
+sns.despine(left=True, bottom=True)
+plt.xlabel('Income level')
+plt.ylabel('Height in cm')
+plt.show()
+```
+
+# Correlation
+
+## Computing Correlations
+
+
+```
+# Select columns
+columns = ['AGE', 'INCOME2', '_VEGESU1']
+subset = brfss[columns]
+
+# Compute the correlation matrix
+print(subset.corr())
+```
+
+## Simple regression between income and vegetables
+
+Note: `linregress` does not handle NANs so we use dropna to clean the data first
+
+```
+from scipy.stats import linregress
+
+# Extract the variables
+subset = brfss.dropna(subset=['INCOME2', '_VEGESU1'])
+xs = subset['INCOME2']
+ys = subset['_VEGESU1']
+
+# Compute the linear regression
+res = linregress(xs, ys)
+print(res)
+```
+
+## Fit a line to a scatter plot
+
+Helps visualize the relationship
+
+```
+# Plot the scatter plot
+plt.clf()
+x_jitter = xs + np.random.normal(0, 0.15, len(xs))
+plt.plot(x_jitter, ys, 'o', alpha=0.2)
+
+# Plot the line of best fit
+fx = np.array([min(xs), max(xs)])
+fy = res.intercept + res.slope*fx
+print(fy)
+plt.plot(fx, fy, '-', alpha=0.7)
+
+plt.xlabel('Income code')
+plt.ylabel('Vegetable servings per day')
+plt.ylim([0, 6])
+plt.show()
+```
+
+# Multivariate Thinking
+
+## Compare statsmodels with linregress
+
+statsmodels can handle multiple variables, but here we just compare simple regression between these two and they are the same.
+
+
+```
+from scipy.stats import linregress
+import statsmodels.formula.api as smf
+
+# Run regression with linregress
+subset = brfss.dropna(subset=['INCOME2', '_VEGESU1'])
+xs = subset['INCOME2']
+ys = subset['_VEGESU1']
+res = linregress(xs, ys)
+print(res)
+
+# Run regression with StatsModels
+results = smf.ols('_VEGESU1 ~ INCOME2', data = brfss).fit()
+print(results.params)
+```
