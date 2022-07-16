@@ -482,3 +482,39 @@ print(res)
 results = smf.ols('_VEGESU1 ~ INCOME2', data = brfss).fit()
 print(results.params)
 ```
+
+##  Plot income and education to view the relationship
+
+By doing this we can see that this relationship is non-linear
+
+```
+# Group by educ
+grouped = gss.groupby('educ')
+
+# Compute mean income in each group
+mean_income_by_educ = grouped['realinc'].mean()
+
+
+# # Plot mean income as a scatter plot
+plt.plot(mean_income_by_educ, 'o', alpha=0.5)
+
+# Label the axes
+plt.xlabel('Education (years)')
+plt.ylabel('Income (1986 $)')
+plt.show()
+```
+
+## Non-linear model of education
+
+```
+import statsmodels.formula.api as smf
+
+# Add a new column with educ squared
+gss['educ2'] = gss['educ']**2
+
+# Run a regression model with educ, educ2, age, and age2
+results = smf.ols('realinc ~ educ + educ2 + age + age2', data=gss).fit()
+
+# Print the estimated parameters
+print(results.params)
+```
