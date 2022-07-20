@@ -139,7 +139,6 @@ plt.show()
 
 Note: You can also use `pmf_age.plot()` to create a line plot
 
-
 ## Make a CDF
 
 CDF = Cumulative Distribution Function
@@ -160,7 +159,7 @@ print(cdf_age(30))
 ```
 cdf_income = Cdf(gss['income'])
 
-# Calculate the 75th percentile 
+# Calculate the 75th percentile
 percentile_75th = cdf_income.inverse(0.75)
 
 # Calculate the 25th percentile
@@ -230,9 +229,10 @@ plt.show()
 ## Modeling Distributions
 
 Pros and Cons of different distribution types:
-* Use CDFs for exploration as it smooths out randomness
-* Use PMFs if there are a small number of unique values
-* Use KDE if there are a lot of values
+
+- Use CDFs for exploration as it smooths out randomness
+- Use PMFs if there are a small number of unique values
+- Use KDE if there are a lot of values
 
 ## Distribution of income
 
@@ -264,7 +264,7 @@ plt.plot(xs, ys, color='gray')
 
 # Create and plot the Cdf of log_income
 Cdf(log_income).plot()
-    
+
 # Label the axes
 plt.xlabel('log10 of realinc')
 plt.ylabel('CDF')
@@ -299,7 +299,7 @@ Here looking at more than one variable
 
 ## PMF of age
 
-Start off looking at one variable at a time.  It's helpful to get distributions of the variables first.
+Start off looking at one variable at a time. It's helpful to get distributions of the variables first.
 
 ```
 # Extract age
@@ -411,7 +411,6 @@ plt.show()
 
 ## Computing Correlations
 
-
 ```
 # Select columns
 columns = ['AGE', 'INCOME2', '_VEGESU1']
@@ -466,7 +465,6 @@ plt.show()
 
 statsmodels can handle multiple variables, but here we just compare simple regression between these two and they are the same.
 
-
 ```
 from scipy.stats import linregress
 import statsmodels.formula.api as smf
@@ -483,7 +481,7 @@ results = smf.ols('_VEGESU1 ~ INCOME2', data = brfss).fit()
 print(results.params)
 ```
 
-##  Plot income and education to view the relationship
+## Plot income and education to view the relationship
 
 By doing this we can see that this relationship is non-linear
 
@@ -517,4 +515,87 @@ results = smf.ols('realinc ~ educ + educ2 + age + age2', data=gss).fit()
 
 # Print the estimated parameters
 print(results.params)
+```
+
+## Use model predications to help visualize the results
+
+```
+# Run a regression model with educ, educ2, age, and age2
+results = smf.ols('realinc ~ educ + educ2 + age + age2', data=gss).fit()
+
+# Make the DataFrame
+df = pd.DataFrame()
+df['educ'] = np.linspace(0, 20)
+df['age'] = 30
+df['educ2'] = df['educ']**2
+df['age2'] = df['age']**2
+
+# Generate and plot the predictions
+pred = results.predict(df)
+print(pred.head())
+```
+
+## Visualize the predictions with a plot
+
+Plot the model predictions along with the data to see if the model fits the data
+
+```
+# Plot mean income in each age group
+plt.clf()
+grouped = gss.groupby('educ')
+mean_income_by_educ = grouped['realinc'].mean()
+plt.plot(mean_income_by_educ, 'o', alpha=0.5)
+
+# Plot the predictions
+pred = results.predict(df)
+plt.plot(df['educ'], pred , label='Age 30')
+
+# Label axes
+plt.xlabel('Education (years)')
+plt.ylabel('Income (1986 $)')
+plt.legend()
+plt.show()
+```
+
+## Predict a binary variable with logistic regression
+
+Here we predict binary variable of being in favor of legalizing marijuana
+using a categorical variable sex in addition to age and education
+
+```
+# Recode grass
+gss['grass'].replace(2, 0, inplace=True)
+
+# Run logistic regression
+results = smf.logit('grass ~ age + age2 + educ + educ2 + C(sex)', data=gss).fit()
+results.params
+
+# Make a DataFrame with a range of ages
+df = pd.DataFrame()
+df['age'] = np.linspace(18, 89)
+df['age2'] = df['age']**2
+
+# Set the education level to 12
+df['educ'] = 12
+df['educ2'] = df['educ']**2
+
+# Generate predictions for men and women
+df['sex'] = 1
+pred1 = results.predict(df)
+
+df['sex'] = 2
+pred2 = results.predict(df)
+
+plt.clf()
+grouped = gss.groupby('age')
+favor_by_age = gss.groupby('age')['grass'].mean()
+plt.plot(favor_by_age, 'o', alpha=0.5)
+
+plt.plot(df['age'], pred1, label='Male')
+plt.plot(df['age'], pred2, label='Female')
+
+plt.xlabel('Age')
+plt.ylabel('Probability of favoring legalization')
+plt.legend()
+plt.show()
 ```
