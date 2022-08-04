@@ -282,3 +282,162 @@ print(won_25pct)
 won_35pct = 3 * .35
 print(won_35pct)
 ```
+
+# More distributions and the Central Limit Theorem
+
+## Distribution of Amir's sales
+
+
+First check the distribution of the data to see what type of distribution can be used to model the data
+```
+# Histogram of amount with 10 bins and show plot
+amir_deals['amount'].hist(bins=10)
+plt.show()
+```
+
+## Probabilities of the normal distribution
+
+```
+# Probability of deal < 7500
+prob_less_7500 = norm.cdf(7500, 5000, 2000)
+print(prob_less_7500)
+
+# Probability of deal > 1000
+prob_over_1000 = 1 - norm.cdf(1000, 5000, 2000)
+print(prob_over_1000)
+
+# Probability of deal between 3000 and 7000
+prob_3000_to_7000 = norm.cdf(7000, 5000, 2000) - norm.cdf(3000, 5000, 2000)
+print(prob_3000_to_7000)
+
+# Calculate amount that 25% of deals will be less than
+pct_25 = norm.ppf(.25, 5000, 2000)
+print(pct_25)
+```
+
+## Simulating sales under new market conditions
+
+Here use the norm package to simulate sales with new mean and standard deviation
+```
+# Calculate new average amount
+new_mean = 5000 * 1.2
+
+# Calculate new standard deviation
+new_sd = 2000 * 1.3
+
+# Simulate 36 new sales
+new_sales = norm.rvs(new_mean, new_sd, size=36)
+
+# Create histogram and show
+plt.hist(new_sales)
+plt.show()
+```
+
+
+## The CLT in action
+
+```
+# Set seed to 104
+np.random.seed(104)
+
+sample_means = []
+# Loop 100 times
+for i in range(200):
+  # Take sample of 20 num_users
+  samp_20 = amir_deals['num_users'].sample(20, replace=True)
+  # Calculate mean of samp_20
+  samp_20_mean = np.mean(samp_20)
+  # Append samp_20_mean to sample_means
+  sample_means.append(samp_20_mean)
+  
+# Convert to Series and plot histogram
+sample_means_series = pd.Series(sample_means)
+sample_means_series.hist()
+# Show plot
+plt.show()
+```
+
+## The mean of means
+
+```
+# Set seed to 321
+np.random.seed(321)
+
+sample_means = []
+# Loop 30 times to take 30 means
+for i in range(30):
+  # Take sample of size 20 from num_users col of all_deals with replacement
+  cur_sample = all_deals['num_users'].sample(20, replace=True)
+  # Take mean of cur_sample
+  cur_mean = cur_sample.mean()
+  # Append cur_mean to sample_means
+  sample_means.append(cur_mean)
+
+# Print mean of sample_means
+print(np.mean(sample_means))
+
+# Print mean of num_users in amir_deals
+print(amir_deals['num_users'].mean())
+```
+
+## Tracking lead responses
+
+```
+# Import poisson from scipy.stats
+from scipy.stats import poisson
+
+# Probability of 5 responses
+prob_5 = poisson.pmf(5, 4)
+print(prob_5)
+
+# Probability of 5 responses with different average or Lambda value
+prob_coworker = poisson.pmf(5, 5.5)
+print(prob_coworker)
+
+# Probability of 2 or fewer responses
+prob_2_or_less = poisson.cdf(2, 4)
+print(prob_2_or_less)
+
+# Probability of > 10 responses
+prob_over_10 = 1 - poisson.cdf(10, 4)
+print(prob_over_10)
+```
+
+## Modeling time between leads
+
+```
+# Import expon from scipy.stats
+from scipy.stats import expon
+
+# Print probability response takes < 1 hour
+print(expon.cdf(1, scale=2.5))
+
+# Print probability response takes > 4 hours
+print(1 - expon.cdf(4, scale=2.5))
+
+# Print probability response takes 3-4 hours
+print(expon.cdf(4, scale=2.5) - expon.cdf(3, scale=2.5))
+```
+
+# Correlation and Experimental Design
+
+```
+# Create a scatterplot of happiness_score vs. life_exp and show
+sns.scatterplot(x='life_exp', y='happiness_score', data=world_happiness)
+
+# Show plot
+plt.show()
+```
+
+```
+# Create scatterplot of happiness_score vs life_exp with trendline
+sns.lmplot(x='life_exp', y='happiness_score', data=world_happiness, ci=None)
+
+# Show plot
+plt.show()
+
+# Correlation between life_exp and happiness_score
+cor = world_happiness.life_exp.corr(world_happiness.happiness_score)
+
+print(cor)
+```
