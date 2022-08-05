@@ -421,6 +421,9 @@ print(expon.cdf(4, scale=2.5) - expon.cdf(3, scale=2.5))
 
 # Correlation and Experimental Design
 
+
+## Relationship between variables
+
 ```
 # Create a scatterplot of happiness_score vs. life_exp and show
 sns.scatterplot(x='life_exp', y='happiness_score', data=world_happiness)
@@ -439,5 +442,63 @@ plt.show()
 # Correlation between life_exp and happiness_score
 cor = world_happiness.life_exp.corr(world_happiness.happiness_score)
 
+print(cor)
+```
+
+## What can't a correlation measure?
+
+- Scatterplot show a non-linear relationship while corr_coef = 0.7 which is high
+- Correlation only measures linear relationships
+```
+# Scatterplot of gdp_per_cap and life_exp
+sns.scatterplot(x='gdp_per_cap', y='life_exp', data=world_happiness)
+
+# Show plot
+plt.show()
+  
+# Correlation between gdp_per_cap and life_exp
+cor = world_happiness['gdp_per_cap'].corr(world_happiness['life_exp'])
+
+print(cor)
+```
+
+## Transforming variables
+
+- First view the relationship; it's non-linear
+```
+# Scatterplot of happiness_score vs. gdp_per_cap
+sns.scatterplot(x='gdp_per_cap', y='happiness_score', data=world_happiness)
+plt.show()
+
+# Calculate correlation
+cor = world_happiness['gdp_per_cap'].corr(world_happiness['happiness_score'])
+print(cor)
+```
+
+- Apply a log transformation and see the relationship become more linear
+```
+# Create log_gdp_per_cap column
+world_happiness['log_gdp_per_cap'] = np.log(world_happiness['gdp_per_cap'])
+
+# Scatterplot of log_gdp_per_cap and happiness_score
+sns.scatterplot(x='log_gdp_per_cap', y='happiness_score', data=world_happiness)
+plt.show()
+
+# Calculate correlation
+cor = world_happiness['log_gdp_per_cap'].corr(world_happiness['happiness_score'])
+print(cor)
+```
+
+## Does sugar improve happiness?
+
+- Here the scatterplot looks a bit random but can see a positive relationship that's linear
+- Corr = 0.694
+```
+# Scatterplot of grams_sugar_per_day and happiness_score
+sns.scatterplot(x='grams_sugar_per_day', y='happiness_score', data=world_happiness)
+plt.show()
+
+# Correlation between grams_sugar_per_day and happiness_score
+cor = world_happiness['grams_sugar_per_day'].corr(world_happiness['happiness_score'])
 print(cor)
 ```
