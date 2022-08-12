@@ -371,3 +371,132 @@ taiwan_real_estate["cooks_dist"] = summary_info["cooks_d"]
 # Sort taiwan_real_estate by cooks_dist in descending order and print the head.
 print(taiwan_real_estate.sort_values("cooks_dist", ascending=False).head())
 ```
+
+# Simple Logistic Regression Modeling
+
+## Exploring the explanatory variables
+
+```
+# Create the histograms of time_since_last_purchase split by has_churned
+sns.displot(data=churn, x="time_since_last_purchase", col="has_churned")
+plt.show()
+```
+
+```
+# Redraw the plot with time_since_first_purchase
+sns.displot(data=churn, x="time_since_first_purchase", col="has_churned")
+plt.show()
+```
+
+## Visualizing linear and logistic models
+
+```
+# Draw a linear regression trend line and a scatter plot of time_since_first_purchase vs. has_churned
+sns.regplot(x="time_since_first_purchase",
+            y="has_churned",
+            data=churn, 
+            ci=None,
+            line_kws={"color": "red"})
+
+# Draw a logistic regression trend line and a scatter plot of time_since_first_purchase vs. has_churned
+sns.regplot(x="time_since_first_purchase",
+            y="has_churned",
+            data=churn, 
+            ci=None,
+            line_kws={"color": "blue"},
+            logistic=True)
+
+plt.show()
+```
+
+## Logistic regression with logit()
+
+```
+# Import logit
+from statsmodels.formula.api import logit
+
+# Fit a logistic regression of churn vs. length of relationship using the churn dataset
+mdl_churn_vs_relationship = logit('has_churned ~ time_since_first_purchase', data=churn).fit()
+
+# Print the parameters of the fitted model
+print(mdl_churn_vs_relationship.params)
+```
+
+## Probabilities
+
+We can make predictions of the probability of a "yes"
+```
+# Create prediction_data
+prediction_data = explanatory_data.assign(
+    has_churned = mdl_churn_vs_relationship.predict(explanatory_data)
+)
+
+fig = plt.figure()
+
+# Create a scatter plot with logistic trend line
+sns.regplot(x="time_since_first_purchase", y="has_churned", data=churn, ci=None, logistic=True)
+
+# Overlay with prediction_data, colored red
+sns.scatterplot(x="time_since_first_purchase", y="has_churned", data=prediction_data, color="red")
+
+plt.show()
+```
+
+## Most likely outcome
+
+This can be a good way to share the outcome with a non-technical audience
+```
+# Update prediction data by adding most_likely_outcome
+prediction_data["most_likely_outcome"] = np.round(prediction_data["has_churned"])
+
+fig = plt.figure()
+
+# Create a scatter plot with logistic trend line (from previous exercise)
+sns.regplot(x="time_since_first_purchase",
+            y="has_churned",
+            data=churn,
+            ci=None,
+            logistic=True)
+
+# Overlay with prediction_data, colored red
+sns.scatterplot(x="time_since_first_purchase", y="most_likely_outcome", data=prediction_data, color="red")
+
+plt.show()
+```
+
+## Odds ratio
+
+Odds ratios compare the probability of something happening with the probability of it not happening.
+```
+# Update prediction data with odds_ratio
+prediction_data["odds_ratio"] = prediction_data["has_churned"] / (1 - prediction_data["has_churned"])
+
+fig = plt.figure()
+
+# Create a line plot of odds_ratio vs time_since_first_purchase
+sns.lineplot(x="time_since_first_purchase", y="odds_ratio", data=prediction_data)
+
+# Add a dotted horizontal line at odds_ratio = 1
+plt.axhline(y=1, linestyle="dotted")
+
+plt.show()
+```
+
+## Log odds ratio
+
+```
+# Update prediction data with log_odds_ratio
+prediction_data["log_odds_ratio"] = np.log(prediction_data["odds_ratio"])
+
+fig = plt.figure()
+
+# Update the line plot: log_odds_ratio vs. time_since_first_purchase
+sns.lineplot(x="time_since_first_purchase",
+             y="log_odds_ratio",
+             data=prediction_data)
+
+# Add a dotted horizontal line at log_odds_ratio = 0
+plt.axhline(y=0, linestyle="dotted")
+
+plt.show()
+```
