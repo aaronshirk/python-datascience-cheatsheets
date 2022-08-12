@@ -500,3 +500,37 @@ plt.axhline(y=0, linestyle="dotted")
 
 plt.show()
 ```
+
+## Calculating the confusion matrix
+
+```
+# Get the actual responses
+actual_response = churn["has_churned"]
+
+# Get the predicted responses
+predicted_response = np.round(mdl_churn_vs_relationship.predict())
+
+# Create outcomes as a DataFrame of both Series
+outcomes = pd.DataFrame({"actual_response": actual_response, 
+                         "predicted_response": predicted_response})
+
+# Print the outcomes
+print(outcomes.value_counts(sort = False))
+```
+
+## Drawing a mosaic plot of the confusion matrix
+
+```
+# Import mosaic from statsmodels.graphics.mosaicplot
+from statsmodels.graphics.mosaicplot import mosaic
+
+# Calculate the confusion matrix conf_matrix
+conf_matrix = mdl_churn_vs_relationship.pred_table()
+
+# Print it
+print(conf_matrix)
+
+# Draw a mosaic plot of conf_matrix
+mosaic(conf_matrix)
+plt.show()
+```
