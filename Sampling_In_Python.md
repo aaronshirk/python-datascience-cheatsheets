@@ -387,3 +387,110 @@ print(std_pop / np.sqrt(5))
 print(std_pop / np.sqrt(50))
 print(std_pop / np.sqrt(500))
 ```
+
+# Pull Your Data Up By Its Bootstraps
+
+
+## Generating a bootstrap distribution
+
+```
+# Replicate this 1000 times
+mean_danceability_1000 = []
+for i in range(1000):
+	mean_danceability_1000.append(
+        np.mean(spotify_sample.sample(frac=1, replace=True)['danceability'])
+	)
+
+# Draw a histogram of the resample means
+plt.hist(mean_danceability_1000)
+plt.show()
+```
+
+## Sampling distribution vs. bootstrap distribution
+
+Sampling distribution without replacement
+```
+mean_popularity_2000_samp = []
+
+# Generate a sampling distribution of 2000 replicates
+for i in range(2000):
+    mean_popularity_2000_samp.append(
+    	# Sample 500 rows and calculate the mean popularity 
+    	spotify_population.sample(n=500)['popularity'].mean()
+    )
+
+# Print the sampling distribution results
+print(mean_popularity_2000_samp)
+```
+
+Bootstrap distribution without replacement
+```
+mean_popularity_2000_boot = []
+
+# Generate a bootstrap distribution of 2000 replicates
+for i in range(2000):
+    mean_popularity_2000_boot.append(
+    	# Resample 500 rows and calculate the mean popularity     
+    	spotify_sample.sample(frac=1, replace=True)['popularity'].mean()
+    )
+
+# Print the bootstrap distribution results
+print(mean_popularity_2000_boot)
+```
+
+## Compare sampling and bootstrap means
+
+The sampling distribution mean is the best estimate of the true population mean; the bootstrap distribution mean is closest to the original sample mean.
+```
+# Calculate the population mean popularity
+pop_mean = spotify_population['popularity'].mean()
+
+# Calculate the original sample mean popularity
+samp_mean = spotify_sample['popularity'].mean()
+
+# Calculate the sampling dist'n estimate of mean popularity
+samp_distn_mean = np.mean(sampling_distribution)
+
+# Calculate the bootstrap dist'n estimate of mean popularity
+boot_distn_mean = np.mean(bootstrap_distribution)
+
+# Print the means
+print([pop_mean, samp_mean, samp_distn_mean, boot_distn_mean])
+```
+
+The calculation from the bootstrap distribution is the best estimate of the population standard deviation.
+## Compare sampling and bootstrap standard deviations
+
+```
+# Calculate the population std dev popularity
+pop_sd = spotify_population['popularity'].std(ddof=0)
+
+# Calculate the original sample std dev popularity
+samp_sd = spotify_sample['popularity'].std(ddof=1)
+
+# Calculate the sampling dist'n estimate of std dev popularity
+samp_distn_sd = np.std(sampling_distribution, ddof=1) * np.sqrt(5000)
+
+# Calculate the bootstrap dist'n estimate of std dev popularity
+boot_distn_sd = np.std(bootstrap_distribution, ddof=1) * np.sqrt(5000)
+
+# Print the standard deviations
+print([pop_sd, samp_sd, samp_distn_sd, boot_distn_sd])
+```
+
+## Calculating confidence intervals
+
+```
+# Find the mean and std dev of the bootstrap distribution
+point_estimate = np.mean(bootstrap_distribution)
+standard_error = np.std(bootstrap_distribution, ddof=1)
+
+# Find the lower limit of the confidence interval
+lower_se = norm.ppf(0.025, loc=point_estimate, scale=standard_error)
+
+# Find the upper limit of the confidence interval
+upper_se = norm.ppf(0.975, loc=point_estimate, scale=standard_error)
+
+# Print standard error method confidence interval
+print((lower_se, upper_se))
+```
