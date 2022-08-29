@@ -38,9 +38,9 @@ z_score = (late_prop_samp - late_prop_hyp) / std_error
 
 # Calculate the p-value
 p_value = 1 - norm.cdf(z_score, loc=0, scale=1)
-                 
+
 # Print the p-value
-print(p_value) 
+print(p_value)
 ```
 
 # Pass Me ANOVA Glass of Iced t
@@ -76,7 +76,6 @@ print(p_value)
 
 When the standard error is estimated from the sample standard deviation and sample size, the test statistic is transformed into a p-value using the t-distribution.
 
-
 ## Visualizing the difference
 
 ```
@@ -98,19 +97,19 @@ plt.show()
 
 ```
 # Conduct a t-test on diff
-test_results = pingouin.ttest(x=sample_dem_data['diff'], 
-                              y=0, 
+test_results = pingouin.ttest(x=sample_dem_data['diff'],
+                              y=0,
                               alternative="two-sided")
 
 # Conduct a paired t-test on dem_percent_12 and dem_percent_16
-paired_test_results = pingouin.ttest(x=sample_dem_data['dem_percent_12'], 
+paired_test_results = pingouin.ttest(x=sample_dem_data['dem_percent_12'],
                                      y=sample_dem_data['dem_percent_16'],
                                      paired=True,
                                     alternative="two-sided")
 
 
 
-                              
+
 # Print the paired test results
 print(paired_test_results)
 ```
@@ -132,12 +131,13 @@ plt.show()
 ## Pairwise t-tests
 
 No p-value adjustment
+
 ```
 # Perform a pairwise t-test on pack price, grouped by shipment mode
 pairwise_results = pingouin.pairwise_ttests(data=late_shipments,
                                     dv='pack_price',
                                     between='shipment_mode',
-                                    padjust='none') 
+                                    padjust='none')
 
 
 # Print pairwise_results
@@ -145,9 +145,10 @@ print(pairwise_results)
 ```
 
 With Bonferroni p-value adjustment
+
 ```
 # Modify the pairwise t-tests to use Bonferroni p-value adjustment
-pairwise_results = pingouin.pairwise_ttests(data=late_shipments, 
+pairwise_results = pingouin.pairwise_ttests(data=late_shipments,
                                             dv="pack_price",
                                             between="shipment_mode",
                                             padjust="bonf")
@@ -252,7 +253,7 @@ plt.show()
 expected, observed, stats = pingouin.chi2_independence(data=late_shipments, x='vendor_inco_term', y='freight_cost_group')
 
 # Print results
-print(stats[stats['test'] == 'pearson']) 
+print(stats[stats['test'] == 'pearson'])
 ```
 
 ## Visualizing goodness of fit
@@ -288,7 +289,6 @@ print(gof_test)
 # Time to Define the Relationship
 
 ## Testing sample size
-
 
 ```
 # Count the freight_cost_group values
@@ -345,7 +345,7 @@ This gives us more confidence that our assumptions are correct.
 paired_test_results = pingouin.ttest(x=sample_dem_data['dem_percent_12'],
                                 y=sample_dem_data['dem_percent_16'],
                                 paired=True,
-                                alternative='greater') 
+                                alternative='greater')
 
 # Print paired t-test results
 print(paired_test_results)
@@ -365,12 +365,13 @@ print(wilcoxon_test_results)
 ## Wilcoxon-Mann-Whitney
 
 One common rank-based test is the Wilcoxon-Mann-Whitney test, which is like a non-parametric t-test.
+
 ```
 # Select the weight_kilograms and late columns
 weight_vs_late = late_shipments[['weight_kilograms', 'late']]
 
 # Convert weight_vs_late into wide format
-weight_vs_late_wide = weight_vs_late.pivot(columns='late', 
+weight_vs_late_wide = weight_vs_late.pivot(columns='late',
                                            values='weight_kilograms')
 
 # Run a two-sided Wilcoxon-Mann-Whitney test on weight_kilograms vs. late
@@ -384,6 +385,7 @@ print(wmw_test)
 ## Kruskal-Wallis
 
 The Kruskal-Wallis test is a non-parametric version of an ANOVA test, comparing the means across multiple groups.
+
 ```
 # Run a Kruskal-Wallis test on weight_kilograms vs. shipment_mode
 kw_test = pingouin.kruskal(data=late_shipments, dv='weight_kilograms',
@@ -392,3 +394,55 @@ kw_test = pingouin.kruskal(data=late_shipments, dv='weight_kilograms',
 # Print the results
 print(kw_test)
 ```
+
+# Chapter Summary
+
+## Chap 1
+
+1. Proportion test - one sample problem
+   a. z-Score: stat_mean - Hyp-mean / std_error
+   b. p-value: `scipy.stats.norm.cdf(z_score, loc, scale)`
+
+## Chap 2
+
+1. Two-sample problems - compare sample statistic across groups of a variable
+
+- ex: numerical variable compared to categorical variable
+  a. t test statistic follows a t-distribution and has a parameter called degrees of freedom
+  b. p-value: `scipy.stats.t.cdf(t_stat, df=degrees_of_freedom)`
+
+2. Two-sample with paired data
+
+- paired data are data that are not independent
+- can use the diff between the two variables
+  a. `t.cdf(t_stat, df=n_diff-1)`
+
+- pingouin package with diff
+  b. `pingouin.ttest(x=sample_data['diff'], y=0, alternative='less)`
+
+- pingouin package with two variables instead of diff
+  c. `pingouin.ttest(x=sample_data['col1'], y=sample_data['col2'], paired=True, alternative='less)`
+
+3. More than 2 groups
+
+- test for differences between groups
+  a. `pingouin.anova(data=stack_overflow, dv="converted_comp", between="job_sat")`
+
+- identify which category is different
+  b. `pingouin.pairwise_tests(data=stack_overflow, dv="converted_comp", between="job_sat", padjust="none")`
+
+## Chap 3
+
+1. Use simplified Standard Error calculation instead of bootstrap_dstn
+   a. norm.cdf(z_score)
+
+2. Two sample case using standard error equation
+   a. `statsmodels.stats.proportions.proportions_ztest(count=n_hobbyists, nobs=nrows, alternative='two-sided')`
+
+3. Test for independence of variables
+
+a. `expected, observed, stats = pingouin.chi2_independence(data=stack_overflow, x='hobbyist', y='age_cat', correction=False)`
+
+4. Check proportions of each level of categorical varaiable to hypothesized values
+
+a. `scipy.stats.chisquare(f_obs=purple_link_counts['n'], f_exp=hypothesized['n])`
