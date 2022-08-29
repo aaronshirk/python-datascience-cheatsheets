@@ -407,42 +407,73 @@ print(kw_test)
 
 1. Two-sample problems - compare sample statistic across groups of a variable
 
-- ex: numerical variable compared to categorical variable
-  a. t test statistic follows a t-distribution and has a parameter called degrees of freedom
-  b. p-value: `scipy.stats.t.cdf(t_stat, df=degrees_of_freedom)`
+ex: numerical variable compared to categorical variable
+
+a. t test statistic follows a t-distribution and has a parameter called degrees of freedom
+b. p-value: `scipy.stats.t.cdf(t_stat, df=degrees_of_freedom)`
 
 2. Two-sample with paired data
 
-- paired data are data that are not independent
-- can use the diff between the two variables
-  a. `t.cdf(t_stat, df=n_diff-1)`
+paired data are data that are not independent
+can use the diff between the two variables
 
-- pingouin package with diff
-  b. `pingouin.ttest(x=sample_data['diff'], y=0, alternative='less)`
+- `t.cdf(t_stat, df=n_diff-1)`
 
-- pingouin package with two variables instead of diff
-  c. `pingouin.ttest(x=sample_data['col1'], y=sample_data['col2'], paired=True, alternative='less)`
+pingouin package with diff
+
+- `pingouin.ttest(x=sample_data['diff'], y=0, alternative='less)`
+
+pingouin package with two variables instead of diff
+
+- `pingouin.ttest(x=sample_data['col1'], y=sample_data['col2'], paired=True, alternative='less)`
 
 3. More than 2 groups
 
-- test for differences between groups
-  a. `pingouin.anova(data=stack_overflow, dv="converted_comp", between="job_sat")`
+test for differences between groups
 
-- identify which category is different
-  b. `pingouin.pairwise_tests(data=stack_overflow, dv="converted_comp", between="job_sat", padjust="none")`
+- `pingouin.anova(data=stack_overflow, dv="converted_comp", between="job_sat")`
+
+identify which category is different
+
+- `pingouin.pairwise_tests(data=stack_overflow, dv="converted_comp", between="job_sat", padjust="none")`
 
 ## Chap 3
 
 1. Use simplified Standard Error calculation instead of bootstrap_dstn
-   a. norm.cdf(z_score)
+
+- `norm.cdf(z_score)`
 
 2. Two sample case using standard error equation
-   a. `statsmodels.stats.proportions.proportions_ztest(count=n_hobbyists, nobs=nrows, alternative='two-sided')`
+
+- `statsmodels.stats.proportions.proportions_ztest(count=n_hobbyists, nobs=nrows, alternative='two-sided')`
 
 3. Test for independence of variables
 
-a. `expected, observed, stats = pingouin.chi2_independence(data=stack_overflow, x='hobbyist', y='age_cat', correction=False)`
+- `expected, observed, stats = pingouin.chi2_independence(data=stack_overflow, x='hobbyist', y='age_cat', correction=False)`
 
 4. Check proportions of each level of categorical varaiable to hypothesized values
 
-a. `scipy.stats.chisquare(f_obs=purple_link_counts['n'], f_exp=hypothesized['n])`
+- `scipy.stats.chisquare(f_obs=purple_link_counts['n'], f_exp=hypothesized['n])`
+
+## Chap 4
+
+1. Wilcoxon-signed rank test
+
+Works on the ranked absolute differences between the pairs of data
+Used for paired data
+
+- `scipy.stats.rankdata(x) : where x = [1, 15, 3, 10, 6]`
+- `pingouin.wilcoxon(x=repub_votes['percent_08'], y=repub_votes['percent_12'], alternative='less')`
+
+2. Wilcoxon-Mann-Whitney
+
+Basically a t-test on the ranks of numeric input, for non-paired data
+
+- `pingouin.mwu(x=age_vs_comp_wide['child'], y=age_vs_comp_wide['adult'], alternative='greater')`
+
+3. Kruskal-Wallis test
+
+Non-parametric version of the Anova test
+Extends the Wilcoxon-Mann-Whitney test to more than 2 groups
+
+- `pingouin.kruskal(data=stack_overflow, dv='converted_comp', between='job_sat')`
