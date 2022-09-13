@@ -400,8 +400,10 @@ print(kw_test)
 ## Chap 1
 
 1. Proportion test - one sample problem
-   a. z-Score: stat_mean - Hyp-mean / std_error
-   b. p-value: `scipy.stats.norm.cdf(z_score, loc, scale)`
+
+a. z-Score: stat_mean - Hyp-mean / std_error
+
+b. p-value: `scipy.stats.norm.cdf(z_score, loc, scale)`
 
 ## Chap 2
 
@@ -410,6 +412,7 @@ print(kw_test)
 ex: numerical variable compared to categorical variable
 
 a. t test statistic follows a t-distribution and has a parameter called degrees of freedom
+
 b. p-value: `scipy.stats.t.cdf(t_stat, df=degrees_of_freedom)`
 
 2. Two-sample with paired data
@@ -451,9 +454,9 @@ identify which category is different
 
 - `expected, observed, stats = pingouin.chi2_independence(data=stack_overflow, x='hobbyist', y='age_cat', correction=False)`
 
-4. Check proportions of each level of categorical varaiable to hypothesized values
+4. Check proportions of each level of categorical variable to hypothesized values
 
-- `scipy.stats.chisquare(f_obs=purple_link_counts['n'], f_exp=hypothesized['n])`
+- `scipy.stats.chisquare(f_obs=purple_link_counts['n'], f_exp=hypothesized['n'])`
 
 ## Chap 4
 
