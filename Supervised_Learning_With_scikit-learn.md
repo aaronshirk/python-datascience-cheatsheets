@@ -187,3 +187,75 @@ rmse = mean_squared_error(y_test, y_pred, squared=False)
 print("R^2: {}".format(r_squared))
 print("RMSE: {}".format(rmse))
 ```
+
+## Cross-validation for R-squared
+
+```
+# Import the necessary modules
+from sklearn.model_selection import cross_val_score, KFold
+
+# Create a KFold object
+kf = KFold(n_splits=6, shuffle=True, random_state=5)
+
+reg = LinearRegression()
+
+# Compute 6-fold cross-validation scores
+cv_scores = cross_val_score(reg, X, y, cv=kf)
+
+# Print scores
+print(cv_scores)
+```
+
+## Analyzing cross-validation metrics
+
+```
+# Print the mean
+print(np.mean(cv_results))
+
+# Print the standard deviation
+print(np.std(cv_results))
+
+# Print the 95% confidence interval
+print(np.quantile(cv_results, [0.025, 0.975]))
+```
+
+## Regularized regression: Ridge
+
+```
+# Import Ridge
+from sklearn.linear_model import Ridge
+alphas = [0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0]
+ridge_scores = []
+for alpha in alphas:
+  
+  # Create a Ridge regression model
+  ridge = Ridge(alpha=alpha)
+  
+  # Fit the data
+  ridge.fit(X_train, y_train)
+  
+  # Obtain R-squared
+  score = ridge.score(X_test, y_test)
+  ridge_scores.append(score)
+print(ridge_scores)
+```
+
+## Lasso regression for feature importance
+
+```
+# Import Lasso
+from sklearn.linear_model import Lasso
+
+# Instantiate a lasso regression model
+lasso = Lasso(alpha=0.3)
+
+# Fit the model to the data
+lasso.fit(X, y)
+
+# Compute and print the coefficients
+lasso_coef = lasso.coef_
+print(lasso_coef)
+plt.bar(sales_columns, lasso_coef)
+plt.xticks(rotation=45)
+plt.show()
+```
