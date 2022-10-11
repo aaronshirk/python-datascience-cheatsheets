@@ -368,7 +368,20 @@ plt.show()
 
 # Boosting
 
+* Boosting: Ensemble method combining several weak learners to form a strong learner
+* Weak learner: Model doing slightly better than random guessing
+* Example of a weak learner: Decision stump (CART whose max depth = 1)
+* Train an ensemble of predictors sequentially
+* Each predictor tries to correct its predecessor
+
+
 ## AdaBoost classifier
+
+* Adaptive Boosting
+* Each predictor pays more attention to the instances wrongly predicted by its predecessor
+* Achieved by changing the weights of training instances
+* Each predictor is assigned a coefficient alpha 
+* alpha depends on the predictor's training error
 
 ```
 # Import DecisionTreeClassifier
@@ -401,6 +414,16 @@ print('ROC AUC score: {:.2f}'.format(ada_roc_auc))
 
 ## Gradient boosting regressor
 
+* Sequential correction of predecessor's errors
+* Does not tweak teh weights of training instances like in AdaBoost
+* Fit each predictor is trained using its predecessor's residual errors as labels
+* Gradient Boost Trees: a CART is used as a base learner
+
+Cons:
+* GB involves an exhaustive search procedure
+* Each CART is trained to find the best split points and features
+* May lead to CARTs using the same split points and maybe the same features
+
 ```
 # Import GradientBoostingRegressor
 from sklearn.ensemble import GradientBoostingRegressor
@@ -431,6 +454,10 @@ print('Test set RMSE of gb: {:.3f}'.format(rmse_test))
 ```
 
 ## Stochastic gradient boosting regressor
+
+* Each tree is trained on a random subset of rows of the training data
+* The sampled instances (40-80% of the training set) are sampled without replacement
+* Features are sampled (without replacement) when choosing split points
 
 ```
 # Import GradientBoostingRegressor
@@ -464,3 +491,85 @@ print('Test set RMSE of sgbr: {:.3f}'.format(rmse_test))
 
 
 # Model Tuning
+
+Parameters: learned from data
+* CART example: split point of a node, split-feature of a node
+
+Hyperparameters: not learned from data, set prior to training
+* CART example: max-depth, min_samples_leaf, splitting criterion
+
+## Tune model's hyperparameters
+
+```
+# Define params_dt
+params_dt = {
+    'max_depth': [2, 3, 4],
+    'min_samples_leaf': [0.12, 0.14, 0.16, 0.18]
+}
+
+# Import GridSearchCV
+from sklearn.model_selection import GridSearchCV
+
+# Instantiate grid_dt
+grid_dt = GridSearchCV(estimator=dt,
+                       param_grid=params_dt,
+                       scoring='roc_auc',
+                       cv=5,
+                       n_jobs=-1)
+
+grid_dt.fit(X_train, y_train)
+
+# Import roc_auc_score from sklearn.metrics
+from sklearn.metrics import roc_auc_score
+
+# Extract the best estimator
+best_model = grid_dt.best_estimator_
+
+# Predict the test set probabilities of the positive class
+y_pred_proba = best_model.predict_proba(X_test)[:,1]
+
+# Compute test_roc_auc
+test_roc_auc = roc_auc_score(y_test, y_pred_proba)
+
+# Print test_roc_auc
+print('Test set ROC AUC score: {:.3f}'.format(test_roc_auc))
+```
+
+## Random forest hyperparameters
+
+```
+# Define the dictionary 'params_rf'
+params_rf = {
+    'n_estimators': [100, 350, 500],
+    'max_features': ['log2', 'auto', 'sqrt'],
+    'min_samples_leaf': [2, 10, 30]
+}
+
+# Import GridSearchCV
+from sklearn.model_selection import GridSearchCV
+
+# Instantiate grid_rf
+grid_rf = GridSearchCV(estimator=rf,
+                       param_grid=params_rf,
+                       scoring='neg_mean_squared_error',
+                       cv=3,
+                       verbose=1,
+                       n_jobs=-1)
+
+grid_rf.fit(X_train, y_train)
+
+# Import mean_squared_error from sklearn.metrics as MSE 
+from sklearn.metrics import mean_squared_error as MSE
+
+# Extract the best estimator
+best_model = grid_rf.best_estimator_
+
+# Predict test set labels
+y_pred = best_model.predict(X_test)
+
+# Compute rmse_test
+rmse_test = MSE(y_test, y_pred)**(1/2)
+
+# Print rmse_test
+print('Test RMSE of best model: {:.3f}'.format(rmse_test)) 
+```
