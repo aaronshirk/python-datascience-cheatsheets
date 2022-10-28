@@ -108,3 +108,244 @@ plt.show()
 ```
 mean_length_vers = np.mean(versicolor_petal_length)
 ```
+
+## Percentiles, outliers, boxplots
+```
+# Specify array of percentiles: percentiles
+percentiles = np.array([2.5, 25, 50, 75, 97.5])
+
+# Compute percentiles: ptiles_vers
+ptiles_vers = np.percentile(versicolor_petal_length, percentiles)
+```
+
+- ECDF with percentiles
+```
+# Plot the ECDF
+_ = plt.plot(x_vers, y_vers, '.')
+_ = plt.xlabel('petal length (cm)')
+_ = plt.ylabel('ECDF')
+
+# Overlay percentiles as red diamonds.
+_ = plt.plot(ptiles_vers, percentiles/100, marker='D', color='red',
+         linestyle='none')
+```
+
+```
+# Create box plot with Seaborn's default settings
+_ = sns.boxplot(x='species', y='petal length (cm)', data=df)
+
+# Label the axes
+_ = plt.xlabel('species')
+_ = plt.ylabel('petal length (cm)')
+
+# Show the plot
+plt.show()
+```
+
+- Variances
+```
+# Array of differences to mean: differences
+differences = versicolor_petal_length - np.mean(versicolor_petal_length)
+
+# Square the differences: diff_sq
+diff_sq = differences ** 2
+
+
+# Compute the mean square difference: variance_explicit
+variance_explicit = np.mean(diff_sq)
+
+# Compute the variance using NumPy: variance_np
+variance_np = np.var(differences)
+
+# Print the results
+print(variance_explicit, variance_np)
+```
+
+- Standard Deviation
+```
+# Compute the variance: variance
+variance = np.var(versicolor_petal_length)
+
+# Print the square root of the variance
+print(np.sqrt(variance))
+
+# Print the standard deviation
+print(np.std(versicolor_petal_length))
+```
+
+- Scatter plots
+```
+# Make a scatter plot
+_ = plt.plot(versicolor_petal_length, versicolor_petal_width, marker='.', linestyle='none')
+
+# Label the axes
+_ = plt.xlabel('vers petal length (cm)')
+_ = plt.ylabel('vers petal width (cm)')
+
+# Show the result
+plt.show()
+```
+
+- Covariance computation
+```
+# Compute the covariance matrix: covariance_matrix
+covariance_matrix = np.cov(versicolor_petal_length, versicolor_petal_width)
+
+# Print covariance matrix
+print(covariance_matrix)
+
+# Extract covariance of length and width of petals: petal_cov
+petal_cov = covariance_matrix[0, 1]
+
+# Print the length/width covariance
+print(petal_cov)
+```
+
+- Pearson correlation coefficient
+```
+def pearson_r(x, y):
+    """Compute Pearson correlation coefficient between two arrays."""
+    # Compute correlation matrix: corr_mat
+    corr_mat = np.corrcoef(x, y)
+
+    # Return entry [0,1]
+    return corr_mat[0,1]
+
+# Compute Pearson correlation coefficient for I. versicolor: r
+r = pearson_r(versicolor_petal_length, versicolor_petal_width)
+
+# Print the result
+print(r)
+```
+
+## Thinking Probabilistically - Discrete Variables
+
+- Random number generators
+```
+# Seed the random number generator
+np.random.seed(42)
+
+# Initialize random numbers: random_numbers
+random_numbers = np.empty(100000)
+
+# Generate random numbers by looping over range(100000)
+for i in range(100000):
+    random_numbers[i] = np.random.random()
+
+# Plot a histogram
+_ = plt.hist(random_numbers)
+
+# Show the plot
+plt.show()
+```
+
+```
+# Seed random number generator
+np.random.seed(42)
+
+# Initialize the number of defaults: n_defaults
+n_defaults = np.empty(1000)
+
+# Compute the number of defaults
+for i in range(1000):
+    n_defaults[i] = perform_bernoulli_trials(100, 0.05)
+
+
+# Plot the histogram with default number of bins; label your axes
+_ = plt.hist(n_defaults, normed=True)
+_ = plt.xlabel('number of defaults out of 100 loans')
+_ = plt.ylabel('probability')
+
+# Show the plot
+plt.show()
+```
+
+```
+# Compute ECDF: x, y
+x, y = ecdf(n_defaults)
+
+# Plot the ECDF with labeled axes
+_ = plt.plot(x, y, marker='.', linestyle='none')
+_ = plt.xlabel('number of defaults')
+_ = plt.ylabel('ECDF') 
+
+# Show the plot
+plt.show()
+
+# Compute the number of 100-loan simulations with 10 or more defaults: n_lose_money
+n_lose_money = np.sum(n_defaults >= 10)
+
+# Compute and print probability of losing money
+print('Probability of losing money =', n_lose_money / len(n_defaults))
+
+```
+
+- binomial distribution with numpy
+```
+# Take 10,000 samples out of the binomial distribution: n_defaults
+n_defaults = np.random.binomial(100, 0.05, size=10000)
+
+# Compute CDF: x, y
+x, y = ecdf(n_defaults)
+
+# Plot the CDF with axis labels
+_ = plt.plot(x, y, marker='.', linestyle='none')
+_ = plt.xlabel('number of defaults')
+_ = plt.ylabel('CDF')
+
+# Show the plot
+plt.show()
+```
+
+- Binomial PMF histogram
+```
+# Compute bin edges: bins
+bins = np.arange(0, max(n_defaults) + 1.5) - 0.5
+
+# Generate histogram
+_ = plt.hist(n_defaults, bins=bins, normed=True)
+_ = plt.xlabel('number of defaults')
+_ = plt.ylabel('PMF')
+
+# Show the plot
+plt.show()
+```
+
+- Poisson vs Binomial
+```
+# Draw 10,000 samples out of Poisson distribution: samples_poisson
+samples_poisson = np.random.poisson(10, size=10000)
+
+# Print the mean and standard deviation
+print('Poisson:     ', np.mean(samples_poisson),
+                       np.std(samples_poisson))
+
+# Specify values of n and p to consider for Binomial: n, p
+n = [20, 100, 1000]
+p = [0.5, 0.1, 0.01]
+
+
+# Draw 10,000 samples for each n,p pair: samples_binomial
+for i in range(3):
+    samples_binomial = np.random.binomial(n[i], p[i], size=10000)
+
+    # Print results
+    print('n =', n[i], 'Binom:', np.mean(samples_binomial),
+                                 np.std(samples_binomial))
+```
+
+- Poisson example
+```
+# Draw 10,000 samples out of Poisson distribution: n_nohitters
+n_nohitters = np.random.poisson(251/115, size=10000)
+
+# Compute number of samples that are seven or greater: n_large
+n_large = np.sum(n_nohitters >= 7)
+
+# Compute probability of getting seven or more: p_large
+p_large = n_large / len(n_nohitters)
+
+# Print the result
+print('Probability of seven or more no-hitters:', p_large)
+
+```
