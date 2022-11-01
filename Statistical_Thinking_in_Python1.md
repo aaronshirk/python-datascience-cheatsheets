@@ -218,9 +218,9 @@ r = pearson_r(versicolor_petal_length, versicolor_petal_width)
 print(r)
 ```
 
-## Thinking Probabilistically - Discrete Variables
+# Thinking Probabilistically - Discrete Variables
 
-- Random number generators
+## Random number generators
 ```
 # Seed the random number generator
 np.random.seed(42)
@@ -280,7 +280,7 @@ print('Probability of losing money =', n_lose_money / len(n_defaults))
 
 ```
 
-- binomial distribution with numpy
+## binomial distribution with numpy
 ```
 # Take 10,000 samples out of the binomial distribution: n_defaults
 n_defaults = np.random.binomial(100, 0.05, size=10000)
@@ -297,7 +297,7 @@ _ = plt.ylabel('CDF')
 plt.show()
 ```
 
-- Binomial PMF histogram
+## Binomial PMF histogram
 ```
 # Compute bin edges: bins
 bins = np.arange(0, max(n_defaults) + 1.5) - 0.5
@@ -311,7 +311,7 @@ _ = plt.ylabel('PMF')
 plt.show()
 ```
 
-- Poisson vs Binomial
+## Poisson vs Binomial
 ```
 # Draw 10,000 samples out of Poisson distribution: samples_poisson
 samples_poisson = np.random.poisson(10, size=10000)
@@ -334,7 +334,7 @@ for i in range(3):
                                  np.std(samples_binomial))
 ```
 
-- Poisson example
+## Poisson example
 ```
 # Draw 10,000 samples out of Poisson distribution: n_nohitters
 n_nohitters = np.random.poisson(251/115, size=10000)
@@ -349,3 +349,103 @@ p_large = n_large / len(n_nohitters)
 print('Probability of seven or more no-hitters:', p_large)
 
 ```
+
+# Thinking Probabilistically - Continuous Variables
+
+## Normal PDF
+```
+# Draw 100000 samples from Normal distribution with stds of interest: samples_std1, samples_std3, samples_std10
+samples_std1 = np.random.normal(20, 1, size=100000)
+samples_std3 = np.random.normal(20, 3, size=100000)
+samples_std10 = np.random.normal(20, 10, size=100000)
+
+# Make histograms
+_ = plt.hist(samples_std1, bins=100, normed=True, histtype='step')
+_ = plt.hist(samples_std3, bins=100, normed=True, histtype='step')
+_ = plt.hist(samples_std10, bins=100, normed=True, histtype='step')
+
+# Make a legend, set limits and show plot
+_ = plt.legend(('std = 1', 'std = 3', 'std = 10'))
+plt.ylim(-0.01, 0.42)
+plt.show()
+plt.clf()
+```
+
+## Normal CDF
+```
+# Generate CDFs
+x_std1, y_std1 = ecdf(samples_std1)
+x_std3, y_std3 = ecdf(samples_std3)
+x_std10, y_std10 = ecdf(samples_std10)
+
+# Plot CDFs
+_ = plt.plot(x_std1, y_std1, marker='.', linestyle='none')
+_ = plt.plot(x_std3, y_std3, marker='.', linestyle='none')
+_ = plt.plot(x_std10, y_std10, marker='.', linestyle='none')
+
+# Make a legend and show the plot
+_ = plt.legend(('std = 1', 'std = 3', 'std = 10'), loc='lower right')
+plt.show()
+plt.clf()
+```
+
+## Belmont Stakes normally distributed?
+```
+# Compute mean and standard deviation: mu, sigma
+mu = np.mean(belmont_no_outliers)
+sigma = np.std(belmont_no_outliers)
+
+# Sample out of a normal distribution with this mu and sigma: samples
+samples = np.random.normal(mu, sigma, size=10000)
+
+# Get the CDF of the samples and of the data
+x_theor, y_theor = ecdf(samples)
+x, y = ecdf(belmont_no_outliers)
+
+# Plot the CDFs and show the plot
+_ = plt.plot(x_theor, y_theor)
+_ = plt.plot(x, y, marker='.', linestyle='none')
+_ = plt.xlabel('Belmont winning time (sec.)')
+_ = plt.ylabel('CDF')
+plt.show()
+```
+
+## Chances of beating Secretariat's Belmont stakes time
+```
+# Take a million samples out of the Normal distribution: samples
+samples = np.random.normal(mu, sigma, size=1000000)
+
+# Compute the fraction that are faster than 144 seconds: prob
+prob = sum(samples <= 144) / len(samples)
+
+# Print the result
+print('Probability of besting Secretariat:', prob)
+```
+
+## New story with new distribution
+```
+def successive_poisson(tau1, tau2, size=1):
+    """Compute time for arrival of 2 successive Poisson processes."""
+    # Draw samples out of first exponential distribution: t1
+    t1 = np.random.exponential(tau1, size)
+
+    # Draw samples out of second exponential distribution: t2
+    t2 = np.random.exponential(tau2, size)
+
+    return t1 + t2
+```
+
+```
+# Draw samples of waiting times: waiting_times
+waiting_times = successive_poisson(764, 715, size=100000)
+
+# Make the histogram
+_ = plt.hist(waiting_times, bins=100, normed=True, histtype='step')
+_ = plt.xlabel('waiting times')
+_ = plt.ylabel('PDF')
+
+# Show the plot
+plt.show()
+plt.clf()
+```
+
